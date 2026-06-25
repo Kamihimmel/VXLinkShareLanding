@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -16,32 +16,58 @@
                 <span>VX Link Helper</span>
             </div>
             <nav>
-                <a href="#features">Features</a>
-                <a href="#platforms">Supported Platforms</a>
-                <a href="#installation">Installation</a>
-                <a href="https://github.com/Kamihimmel/VXLinkShare" target="_blank" class="github-link">View Source</a>
+                <a href="#features" data-i18n="nav-features">功能特点</a>
+                <a href="#platforms" data-i18n="nav-platforms">支持平台</a>
+                <a href="#download-section" data-i18n="nav-download">获取扩展</a>
+                <button id="lang-toggle" class="lang-btn">English</button>
             </nav>
         </div>
     </header>
 
     <section class="hero">
         <div class="container">
-            <h1>Share cleaner, safer links instantly</h1>
-            <p class="subtitle">A lightweight, privacy-focused browser extension that automatically strips intrusive tracking parameters and generates beautiful, embed-friendly previews.</p>
+            <h1 data-i18n="hero-title">分享更干净、更安全的链接</h1>
+            <p class="subtitle" data-i18n="hero-subtitle">轻量级、保护隐私的浏览器扩展。自动剥离各类追踪参数，并为 X、Bilibili、Reddit 和 Pixiv 生成对社交软件更友好的预览链接。</p>
             
-            <div class="cta-group">
-                <a href="#installation" id="download-btn" class="btn btn-primary">Download Extension</a>
-                <a href="https://github.com/Kamihimmel/VXLinkShare" target="_blank" class="btn btn-secondary">Explore Repository</a>
+            <div id="download-section" class="download-grid">
+                <a href="https://chromewebstore.google.com/" target="_blank" class="btn-store chrome-btn">
+                    <span class="btn-icon">🌐</span>
+                    <div class="btn-text">
+                        <small>Download for</small>
+                        <span>Chrome 商店下载</span>
+                    </div>
+                </a>
+                <a href="https://addons.mozilla.org/" target="_blank" class="btn-store firefox-btn">
+                    <span class="btn-icon">🦊</span>
+                    <div class="btn-text">
+                        <small>Get it for</small>
+                        <span>Firefox 商店下载</span>
+                    </div>
+                </a>
+                <a href="https://apps.apple.com/" target="_blank" class="btn-store safari-btn">
+                    <span class="btn-icon">🧭</span>
+                    <div class="btn-text">
+                        <small>Install on</small>
+                        <span>Safari 商店下载</span>
+                    </div>
+                </a>
+                <a href="https://github.com/YOUR_USERNAME/YOUR_EXTENSION_REPO/releases" target="_blank" class="btn-store zip-btn">
+                    <span class="btn-icon">📦</span>
+                    <div class="btn-text">
+                        <small>Developer Mode</small>
+                        <span>下载独立离线包</span>
+                    </div>
+                </a>
             </div>
 
             <div class="preview-box">
                 <div class="preview-line bad-url">
-                    <span class="label">Original Link:</span>
+                    <span class="label" data-i18n="preview-original">原始链接:</span>
                     <span class="url">https://www.bilibili.com/video/BV1xx411c7xx/?spm_id_from=333.788&share_source=copy_web&vd_source=123456</span>
                 </div>
-                <div class="arrow-down">⬇️ Strips Trackers & Rewrites Host</div>
+                <div class="arrow-down" data-i18n="preview-arrow">⬇️ 自动净化参数并重写域名</div>
                 <div class="preview-line good-url">
-                    <span class="label">VX Link:</span>
+                    <span class="label" data-i18n="preview-vx">VX 净化链接:</span>
                     <span class="url">https://vxbilibili.com/video/BV1xx411c7xx/</span>
                 </div>
             </div>
@@ -50,19 +76,19 @@
 
     <section id="features" class="features">
         <div class="container">
-            <h2>Why use VX Link Helper?</h2>
+            <h2 data-i18n="features-title">为什么选择 VX Link Helper？</h2>
             <div class="grid">
                 <div class="card">
-                    <h3>🔒 Absolute Privacy</h3>
-                    <p>Acts 100% locally in your browser. It strips identifying trackers (like tracking IDs, share sources, and behavioral analytics tokens) before you copy or share links.</p>
+                    <h3 data-i18n="feat1-title">🔒 纯本地保护</h3>
+                    <p data-i18n="feat1-desc">100% 运行在浏览器本地，不向外发起任何网络请求。在复制的瞬间剥离隐藏在链接内部的用户行为追踪令牌。</p>
                 </div>
                 <div class="card">
-                    <h3>✨ Perfect Embed Cards</h3>
-                    <p>Automatically redirects native domains to specialized preview proxies, making sure media looks pristine when pasted into messaging apps like Discord and Telegram.</p>
+                    <h3 data-i18n="feat2-title">✨ 完美卡片渲染</h3>
+                    <p data-i18n="feat2-desc">自动将支持的网站域名转换为兼容的预览代理（如 vxtwitter），确保在 Discord、Telegram 等聊天软件中直接展现完整的媒体卡片。</p>
                 </div>
                 <div class="card">
-                    <h3>⚡ Seamless Integration</h3>
-                    <p>Injects native-looking, lightweight action buttons directly into your favorite platforms right next to their native sharing buttons.</p>
+                    <h3 data-i18n="feat3-title">⚡ 原生级内嵌</h3>
+                    <p data-i18n="feat3-desc">利用高效的 DOM 监听，无感地在目标网站原生分享按钮旁注入快捷的“VX”一键复制按钮，极速流畅。</p>
                 </div>
             </div>
         </div>
@@ -70,14 +96,14 @@
 
     <section id="platforms" class="platforms">
         <div class="container">
-            <h2>Supported Transformations</h2>
+            <h2 data-i18n="platforms-title">已支持的域名转换</h2>
             <div class="table-wrapper">
                 <table>
                     <thead>
                         <tr>
-                            <th>Platform</th>
-                            <th>Original Domain</th>
-                            <th>Privacy / Embed Domain</th>
+                            <th data-i18n="table-th1">平台</th>
+                            <th data-i18n="table-th2">原始域名</th>
+                            <th data-i18n="table-th3">转换后防追踪/卡片域名</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -107,39 +133,11 @@
         </div>
     </section>
 
-    <section id="installation" class="installation">
-        <div class="container">
-            <h2>How to Install (Developer Mode)</h2>
-            <p class="install-intro">Until the extension is deployed to web stores, load it manually into your browser using these quick steps:</p>
-            
-            <div class="steps-container">
-                <div class="step-card">
-                    <h3>1. Clone & Build</h3>
-                    <p>Download or clone the source code repository, navigate to the folder, and run the setup compiler: <code>./build.sh</code> (or <code>build.cmd</code> on Windows).</p>
-                </div>
-                <div class="step-card">
-                    <h3>2. Open Extensions Page</h3>
-                    <p>In your browser, open the extension manager (e.g., go to <code>chrome://extensions/</code> in Chrome or Edge).</p>
-                </div>
-                <div class="step-card">
-                    <h3>3. Enable Developer Mode</h3>
-                    <p>Toggle the <strong>Developer mode</strong> switch usually located in the top-right corner of the layout panel.</p>
-                </div>
-                <div class="step-card">
-                    <h3>4. Load Directory</h3>
-                    <p>Click <strong>Load unpacked</strong> and select the target build folder matching your browser profile (e.g., select the <code>chrome/</code> folder).</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
     <footer>
         <div class="container">
-            <p>VX Link Helper is 100% open-source, local-only, and tracking-free.</p>
+            <p data-i18n="footer-text">VX Link Helper 承诺完全开源、本地运行且无任何潜在数据追踪。</p>
             <p class="footer-meta">
-                Zero Framework Dependencies • Secure Extension Architecture
-                <a href="privacy.html" style="color: var(--accent); text-decoration: none;">Privacy Policy</a> • 
-                <a href="https://github.com/Kamihimmel/VXLinkShare" target="_blank" style="color: var(--text-muted); text-decoration: none;">GitHub Repository</a>
+                <a href="privacy.html" data-i18n="footer-privacy">隐私政策</a>
             </p>
         </div>
     </footer>
