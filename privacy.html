@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Privacy Policy - VX Link Helper</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
     <link rel="icon" type="image/png" href="icon128.png">
     <style>
@@ -27,7 +28,10 @@
             </div>
             <nav>
                 <a href="index.html" id="back-home">返回首页</a>
-                <button id="lang-toggle" class="lang-btn">English</button>
+                <select id="lang-select" class="lang-select">
+                    <option value="en">English</option>
+                    <option value="zh">简体中文</option>
+                </select>
             </nav>
         </div>
     </header>
@@ -46,8 +50,8 @@
             <h2 id="p-h3">3. 权限合规说明</h2>
             <p id="p-d3">本扩展申请的专用权限仅为实现对应原生功能，绝无滥用：</p>
             <ul>
-                <li id="p-l1"><code>contextMenus</code>: 用于在右键菜单中生成“复制 VX 链接”选项。</li>
-                <li id="p-l2"><code>clipboardWrite</code>: 用于将清洗干净的链接回写至系统剪贴板。</li>
+                <li id="p-l1">contextMenus: 用于在右键菜单中生成“复制 VX 链接”选项。</li>
+                <li id="p-l2">clipboardWrite: 用于将清洗干净的链接回写至系统剪贴板。</li>
                 <li id="p-l3">特定主站域名匹配: 用于在被支持的网站上安全注入对应的物理复制按钮。</li>
             </ul>
         </div>
@@ -55,7 +59,7 @@
 
     <footer>
         <div class="container">
-            <p>© 2026 VX Link Helper • Open Source Initiative</p>
+            <p data-i18n="footer-text">VX Link Helper 承诺完全开源、本地运行且无任何潜在数据追踪。</p>
         </div>
     </footer>
 
