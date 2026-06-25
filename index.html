@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VX Link Helper - Clear, Safe, Embeddable Links</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" type="image/png" href="icon128.png">
+</head>
+<body>
+
+    <header>
+        <div class="container nav-container">
+            <div class="logo">
+                <img src="icon128.png" alt="VX Link Helper Logo" class="logo-img">
+                <span>VX Link Helper</span>
+            </div>
+            <nav>
+                <a href="#features">Features</a>
+                <a href="#platforms">Supported Platforms</a>
+                <a href="#installation">Installation</a>
+                <a href="https://github.com/Kamihimmel/VXLinkShare" target="_blank" class="github-link">View Source</a>
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="container">
+            <h1>Share cleaner, safer links instantly</h1>
+            <p class="subtitle">A lightweight, privacy-focused browser extension that automatically strips intrusive tracking parameters and generates beautiful, embed-friendly previews.</p>
+            
+            <div class="cta-group">
+                <a href="#installation" id="download-btn" class="btn btn-primary">Download Extension</a>
+                <a href="https://github.com/Kamihimmel/VXLinkShare" target="_blank" class="btn btn-secondary">Explore Repository</a>
+            </div>
+
+            <div class="preview-box">
+                <div class="preview-line bad-url">
+                    <span class="label">Original Link:</span>
+                    <span class="url">https://www.bilibili.com/video/BV1xx411c7xx/?spm_id_from=333.788&share_source=copy_web&vd_source=123456</span>
+                </div>
+                <div class="arrow-down">⬇️ Strips Trackers & Rewrites Host</div>
+                <div class="preview-line good-url">
+                    <span class="label">VX Link:</span>
+                    <span class="url">https://vxbilibili.com/video/BV1xx411c7xx/</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="features" class="features">
+        <div class="container">
+            <h2>Why use VX Link Helper?</h2>
+            <div class="grid">
+                <div class="card">
+                    <h3>🔒 Absolute Privacy</h3>
+                    <p>Acts 100% locally in your browser. It strips identifying trackers (like tracking IDs, share sources, and behavioral analytics tokens) before you copy or share links.</p>
+                </div>
+                <div class="card">
+                    <h3>✨ Perfect Embed Cards</h3>
+                    <p>Automatically redirects native domains to specialized preview proxies, making sure media looks pristine when pasted into messaging apps like Discord and Telegram.</p>
+                </div>
+                <div class="card">
+                    <h3>⚡ Seamless Integration</h3>
+                    <p>Injects native-looking, lightweight action buttons directly into your favorite platforms right next to their native sharing buttons.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="platforms" class="platforms">
+        <div class="container">
+            <h2>Supported Transformations</h2>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Platform</th>
+                            <th>Original Domain</th>
+                            <th>Privacy / Embed Domain</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>X / Twitter</strong></td>
+                            <td><code>x.com</code> / <code>twitter.com</code></td>
+                            <td><span class="highlight"><code>vxtwitter.com</code></span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Reddit</strong></td>
+                            <td><code>reddit.com</code></td>
+                            <td><span class="highlight"><code>vxreddit.com</code></span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Pixiv</strong></td>
+                            <td><code>pixiv.net</code></td>
+                            <td><span class="highlight"><code>phixiv.net</code></span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Bilibili</strong></td>
+                            <td><code>bilibili.com</code> / <code>b23.tv</code></td>
+                            <td><span class="highlight"><code>vxbilibili.com</code></span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <section id="installation" class="installation">
+        <div class="container">
+            <h2>How to Install (Developer Mode)</h2>
+            <p class="install-intro">Until the extension is deployed to web stores, load it manually into your browser using these quick steps:</p>
+            
+            <div class="steps-container">
+                <div class="step-card">
+                    <h3>1. Clone & Build</h3>
+                    <p>Download or clone the source code repository, navigate to the folder, and run the setup compiler: <code>./build.sh</code> (or <code>build.cmd</code> on Windows).</p>
+                </div>
+                <div class="step-card">
+                    <h3>2. Open Extensions Page</h3>
+                    <p>In your browser, open the extension manager (e.g., go to <code>chrome://extensions/</code> in Chrome or Edge).</p>
+                </div>
+                <div class="step-card">
+                    <h3>3. Enable Developer Mode</h3>
+                    <p>Toggle the <strong>Developer mode</strong> switch usually located in the top-right corner of the layout panel.</p>
+                </div>
+                <div class="step-card">
+                    <h3>4. Load Directory</h3>
+                    <p>Click <strong>Load unpacked</strong> and select the target build folder matching your browser profile (e.g., select the <code>chrome/</code> folder).</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>VX Link Helper is 100% open-source, local-only, and tracking-free.</p>
+            <p class="footer-meta">
+                Zero Framework Dependencies • Secure Extension Architecture
+                <a href="privacy.html" style="color: var(--accent); text-decoration: none;">Privacy Policy</a> • 
+                <a href="https://github.com/Kamihimmel/VXLinkShare" target="_blank" style="color: var(--text-muted); text-decoration: none;">GitHub Repository</a>
+            </p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
