@@ -22,6 +22,7 @@
     <link rel="icon" type="image/png" href="icon128.png">
 </head>
 <body>
+    <div class="background-tech" aria-hidden="true"><span></span><span></span><span></span></div>
 
     <header>
         <div class="container nav-container">
@@ -32,11 +33,13 @@
             <nav>
                 <a href="#features" data-i18n="nav-features">功能特点</a>
                 <a href="#platforms" data-i18n="nav-platforms">支持平台</a>
-                <a href="#download-section" data-i18n="nav-download">获取扩展</a>
-                <select id="lang-select" class="lang-select">
-                    <option value="en">English</option>
-                    <option value="zh">简体中文</option>
-                </select>
+                <label class="lang-control" for="lang-select">
+                    <span data-i18n="language-label">语言</span>
+                    <select id="lang-select" class="lang-select" aria-label="Language">
+                        <option value="en">English</option>
+                        <option value="zh">简体中文</option>
+                    </select>
+                </label>
             </nav>
         </div>
     </header>
@@ -47,31 +50,31 @@
             <p class="subtitle" data-i18n="hero-subtitle">轻量级、保护隐私的浏览器扩展。自动剥离各类追踪参数，并为 X、Bilibili、Reddit 和 Pixiv 生成对社交软件更友好的预览链接。</p>
             
             <div id="download-section" class="download-grid">
-                <a href="https://chromewebstore.google.com/" target="_blank" class="btn-store chrome-btn">
+                <a href="https://github.com/Kamihimmel/VXLinkShare" target="_blank" rel="noopener" class="btn-store chrome-btn">
                     <span class="btn-icon">🌐</span>
                     <div class="btn-text">
-                        <small>Download for</small>
+                        <small data-i18n="store-chrome-small">Download for</small>
                         <span id="btn-chrome">Chrome 商店下载</span>
                     </div>
                 </a>
-                <a href="https://addons.mozilla.org/" target="_blank" class="btn-store firefox-btn">
+                <a href="https://github.com/Kamihimmel/VXLinkShare" target="_blank" rel="noopener" class="btn-store firefox-btn">
                     <span class="btn-icon">🦊</span>
                     <div class="btn-text">
-                        <small>Get it for</small>
+                        <small data-i18n="store-firefox-small">Get it for</small>
                         <span id="btn-firefox">Firefox 商店下载</span>
                     </div>
                 </a>
-                <a href="https://apps.apple.com/" target="_blank" class="btn-store safari-btn">
+                <a href="https://github.com/Kamihimmel/VXLinkShare" target="_blank" rel="noopener" class="btn-store safari-btn">
                     <span class="btn-icon">🧭</span>
                     <div class="btn-text">
-                        <small>Install on</small>
+                        <small data-i18n="store-safari-small">Install on</small>
                         <span id="btn-safari">Safari 商店下载</span>
                     </div>
                 </a>
-                <a href="https://github.com/YOUR_USERNAME/YOUR_EXTENSION_REPO/releases" target="_blank" class="btn-store zip-btn">
+                <a href="https://github.com/Kamihimmel/VXLinkShare/releases" target="_blank" rel="noopener" class="btn-store zip-btn">
                     <span class="btn-icon">📦</span>
                     <div class="btn-text">
-                        <small>Developer Mode</small>
+                        <small data-i18n="store-zip-small">Developer Mode</small>
                         <span id="btn-zip">下载独立离线包</span>
                     </div>
                 </a>
@@ -80,12 +83,12 @@
             <div class="preview-box">
                 <div class="preview-line bad-url">
                     <span class="label" data-i18n="preview-original">原始链接:</span>
-                    <span class="url" id="url-original"></span>
+                    <a class="url" id="url-original" href="https://www.bilibili.com/video/BV1xx411c7xx/?spm_id_from=333.788&amp;share_source=copy_web&amp;vd_source=123456" target="_blank" rel="noopener">https://www.bilibili.com/video/BV1xx411c7xx/?spm_id_from=333.788&amp;share_source=copy_web&amp;vd_source=123456</a>
                 </div>
                 <div class="arrow-down" data-i18n="preview-arrow">⬇️ 自动净化参数并重写域名</div>
                 <div class="preview-line good-url">
                     <span class="label" data-i18n="preview-vx">VX 净化链接:</span>
-                    <span class="url" id="url-vx"></span>
+                    <a class="url" id="url-vx" href="https://vxbilibili.com/video/BV1xx411c7xx/" target="_blank" rel="noopener">https://vxbilibili.com/video/BV1xx411c7xx/</a>
                 </div>
             </div>
         </div>
@@ -152,10 +155,12 @@
 
     <footer>
         <div class="container">
-            <p data-i18n="footer-text">VX Link Helper 承诺完全开源、本地运行且无任何潜在数据追踪。</p>
             <p class="footer-meta">
+                <a href="https://github.com/Kamihimmel/VXLinkShare" target="_blank" rel="noopener" data-i18n="footer-docs">项目说明</a>
+                <span aria-hidden="true"> · </span>
                 <a href="privacy.html" data-i18n="footer-privacy">隐私政策</a>
             </p>
+            <p class="footer-note" data-i18n="footer-text">VX Link Helper 承诺完全开源、本地运行且无任何潜在数据追踪。</p>
         </div>
     </footer>
 

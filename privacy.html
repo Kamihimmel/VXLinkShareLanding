@@ -17,6 +17,7 @@
     </style>
 </head>
 <body>
+    <div class="background-tech" aria-hidden="true"><span></span><span></span><span></span></div>
 
     <header>
         <div class="container nav-container">
@@ -28,10 +29,13 @@
             </div>
             <nav>
                 <a href="index.html" id="back-home">返回首页</a>
-                <select id="lang-select" class="lang-select">
-                    <option value="en">English</option>
-                    <option value="zh">简体中文</option>
-                </select>
+                <label class="lang-control" for="lang-select">
+                    <span data-i18n="language-label">语言</span>
+                    <select id="lang-select" class="lang-select" aria-label="Language">
+                        <option value="en">English</option>
+                        <option value="zh">简体中文</option>
+                    </select>
+                </label>
             </nav>
         </div>
     </header>
@@ -59,7 +63,12 @@
 
     <footer>
         <div class="container">
-            <p data-i18n="footer-text">VX Link Helper 承诺完全开源、本地运行且无任何潜在数据追踪。</p>
+            <p class="footer-meta">
+                <a href="https://github.com/Kamihimmel/VXLinkShare" target="_blank" rel="noopener" data-i18n="footer-docs">项目说明</a>
+                <span aria-hidden="true"> · </span>
+                <a href="privacy.html" data-i18n="footer-privacy">隐私政策</a>
+            </p>
+            <p class="footer-note" data-i18n="footer-text">VX Link Helper 承诺完全开源、本地运行且无任何潜在数据追踪。</p>
         </div>
     </footer>
 
