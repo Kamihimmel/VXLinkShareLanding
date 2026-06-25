@@ -44,6 +44,8 @@ const i18nData = {
         "p-l1": "contextMenus: Adds the Copy VX Link action to the browser context menu.",
         "p-l2": "clipboardWrite: Writes the cleaned link back to your system clipboard.",
         "p-l3": "Specific host matches: Safely injects copy buttons only on supported websites.",
+        "p-h4": "4. Store Statistics",
+        "p-d4": "Distribution platforms such as the Chrome Web Store, Firefox Add-ons, Edge Add-ons, or Safari may provide maintainers with aggregated installation, version, region, or active-device statistics. Those statistics come from the stores themselves; VX Link Helper does not actively upload your links, clipboard contents, or browsing activity.",
         "back-home": "Back to Home",
         "meta-description": "A lightweight, privacy-focused extension that strips tracking parameters and generates embed-friendly links for X, Bilibili, Reddit, and Pixiv."
     },
@@ -91,6 +93,8 @@ const i18nData = {
         "p-l1": "contextMenus: 用于在右键菜单中生成“复制 VX 链接”选项。",
         "p-l2": "clipboardWrite: 用于将清洗干净的链接回写至系统剪贴板。",
         "p-l3": "特定主站域名匹配: 用于在被支持的网站上安全注入对应的复制按钮。",
+        "p-h4": "4. 商店统计说明",
+        "p-d4": "Chrome Web Store、Firefox Add-ons、Edge Add-ons 或 Safari 等分发平台可能向开发者提供聚合安装量、版本、地区或活跃设备统计。这些统计来自商店平台本身；VX Link Helper 扩展不会主动上传您的链接、剪贴板内容或浏览行为。",
         "back-home": "返回首页",
         "meta-description": "轻量级、保护隐私的浏览器扩展。自动剥离追踪参数，并为 X、Bilibili、Reddit 和 Pixiv 生成完美兼容 Discord/Telegram 的卡片预览链接。"
     },
@@ -138,6 +142,8 @@ const i18nData = {
         "p-l1": "contextMenus: 在瀏覽器右鍵選單加入「複製 VX 連結」。",
         "p-l2": "clipboardWrite: 將清理後的連結寫回系統剪貼簿。",
         "p-l3": "特定主站網域匹配: 僅在支援網站安全注入複製按鈕。",
+        "p-h4": "4. 商店統計說明",
+        "p-d4": "Chrome Web Store、Firefox Add-ons、Edge Add-ons 或 Safari 等發佈平台可能向維護者提供彙總的安裝量、版本、地區或活躍裝置統計。這些統計來自商店平台本身；VX Link Helper 不會主動上傳你的連結、剪貼簿內容或瀏覽行為。",
         "back-home": "返回首頁",
         "meta-description": "輕量、重視隱私的擴充功能，可移除追蹤參數，並為 X、Bilibili、Reddit 與 Pixiv 產生適合預覽的連結。"
     },
@@ -185,6 +191,8 @@ const i18nData = {
         "p-l1": "contextMenus: añade la acción Copiar enlace VX al menú contextual del navegador.",
         "p-l2": "clipboardWrite: escribe el enlace limpio en el portapapeles del sistema.",
         "p-l3": "Coincidencias de hosts específicos: inyecta botones solo en sitios compatibles.",
+        "p-h4": "4. Estadísticas de las tiendas",
+        "p-d4": "Plataformas de distribución como Chrome Web Store, Firefox Add-ons, Edge Add-ons o Safari pueden ofrecer a los mantenedores estadísticas agregadas de instalaciones, versiones, regiones o dispositivos activos. Esas estadísticas provienen de las propias tiendas; VX Link Helper no sube activamente tus enlaces, contenido del portapapeles ni actividad de navegación.",
         "back-home": "Volver al inicio",
         "meta-description": "Extensión ligera y privada que elimina parámetros de seguimiento y genera enlaces con vista previa para X, Bilibili, Reddit y Pixiv."
     },
@@ -232,6 +240,8 @@ const i18nData = {
         "p-l1": "contextMenus: يضيف خيار نسخ رابط VX إلى قائمة المتصفح السياقية.",
         "p-l2": "clipboardWrite: يكتب الرابط المنظف إلى حافظة النظام.",
         "p-l3": "مطابقة مضيفين محددين: يحقن أزرار النسخ فقط في المواقع المدعومة.",
+        "p-h4": "4. إحصاءات المتاجر",
+        "p-d4": "قد توفر منصات التوزيع مثل Chrome Web Store وFirefox Add-ons وEdge Add-ons أو Safari للمشرفين إحصاءات مجمعة عن التثبيت أو الإصدارات أو المناطق أو الأجهزة النشطة. تأتي هذه الإحصاءات من المتاجر نفسها؛ ولا يرفع VX Link Helper روابطك أو محتوى الحافظة أو نشاط التصفح بشكل نشط.",
         "back-home": "العودة للرئيسية",
         "meta-description": "إضافة خفيفة وخاصة تزيل معلمات التتبع وتولد روابط مناسبة للمعاينة لـ X وBilibili وReddit وPixiv."
     },
@@ -279,6 +289,8 @@ const i18nData = {
         "p-l1": "contextMenus: adiciona Copiar link VX ao menu de contexto do navegador.",
         "p-l2": "clipboardWrite: grava o link limpo na área de transferência do sistema.",
         "p-l3": "Correspondências de hosts específicos: injeta botões apenas em sites compatíveis.",
+        "p-h4": "4. Estatísticas das lojas",
+        "p-d4": "Plataformas de distribuição como Chrome Web Store, Firefox Add-ons, Edge Add-ons ou Safari podem fornecer aos mantenedores estatísticas agregadas de instalação, versão, região ou dispositivos ativos. Essas estatísticas vêm das próprias lojas; o VX Link Helper não envia ativamente seus links, conteúdo da área de transferência ou atividade de navegação.",
         "back-home": "Voltar ao início",
         "meta-description": "Extensão leve e privada que remove parâmetros de rastreamento e gera links com prévia para X, Bilibili, Reddit e Pixiv."
     },
@@ -326,6 +338,8 @@ const i18nData = {
         "p-l1": "contextMenus : ajoute l’action Copier le lien VX au menu contextuel du navigateur.",
         "p-l2": "clipboardWrite : écrit le lien nettoyé dans le presse-papiers système.",
         "p-l3": "Correspondances d’hôtes spécifiques : injecte des boutons uniquement sur les sites pris en charge.",
+        "p-h4": "4. Statistiques des boutiques",
+        "p-d4": "Les plateformes de distribution comme le Chrome Web Store, Firefox Add-ons, Edge Add-ons ou Safari peuvent fournir aux mainteneurs des statistiques agrégées d’installation, de version, de région ou d’appareils actifs. Ces statistiques proviennent des boutiques elles-mêmes ; VX Link Helper ne téléverse pas activement vos liens, le contenu du presse-papiers ni votre activité de navigation.",
         "back-home": "Retour à l’accueil",
         "meta-description": "Extension légère et privée qui supprime les paramètres de suivi et génère des liens avec aperçu pour X, Bilibili, Reddit et Pixiv."
     },
@@ -373,6 +387,8 @@ const i18nData = {
         "p-l1": "contextMenus: ブラウザのコンテキストメニューに「VXリンクをコピー」を追加します。",
         "p-l2": "clipboardWrite: クリーンなリンクをシステムクリップボードへ書き込みます。",
         "p-l3": "特定ホストの一致: 対応サイトでのみ安全にコピー用ボタンを挿入します。",
+        "p-h4": "4. ストア統計について",
+        "p-d4": "Chrome Web Store、Firefox Add-ons、Edge Add-ons、Safari などの配布プラットフォームは、インストール数、バージョン、地域、アクティブ端末数などの集計統計をメンテナーに提供する場合があります。これらの統計はストア自体から提供されるものであり、VX Link Helper がリンク、クリップボード内容、閲覧行動を能動的にアップロードすることはありません。",
         "back-home": "ホームへ戻る",
         "meta-description": "追跡パラメータを削除し、X、Bilibili、Reddit、Pixiv 向けのプレビューしやすいリンクを生成する軽量でプライバシー重視の拡張機能。"
     }
@@ -428,7 +444,7 @@ function applyTranslations() {
         if (data[key]) el.textContent = data[key];
     });
 
-    ["btn-chrome", "btn-firefox", "btn-safari", "btn-zip", "back-home", "p-title", "p-h1", "p-h2", "p-d2", "p-h3", "p-d3", "p-l1", "p-l2", "p-l3"].forEach(id => setText(id, data[id]));
+    ["btn-chrome", "btn-firefox", "btn-safari", "btn-zip", "back-home", "p-title", "p-h1", "p-h2", "p-d2", "p-h3", "p-d3", "p-l1", "p-l2", "p-l3", "p-h4", "p-d4"].forEach(id => setText(id, data[id]));
     ["p-intro", "p-d1"].forEach(id => setHtml(id, data[id]));
     setPreviewLink("url-original", data["url-original"]);
     setPreviewLink("url-vx", data["url-vx"]);
