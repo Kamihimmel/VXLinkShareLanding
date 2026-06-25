@@ -4,6 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VX Link Helper - Clear, Safe, Embeddable Links</title>
+    <meta name="description" content="轻量级、保护隐私的浏览器扩展。自动剥离追踪参数，并为 X、Bilibili、Reddit 和 Pixiv 生成完美兼容 Discord/Telegram 的卡片预览链接。">
+    
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://vxlinkhelper.yunlu18.net/"> 
+    <meta property="og:title" content="VX Link Helper - 分享更干净、更安全的链接">
+    <meta property="og:description" content="全本地运行的隐私保护扩展。一键净化分享链接，剥离追踪参数，自动生成社交平台友好的媒体卡片。">
+    <meta property="og:image" content="https://vxlinkhelper.yunlu18.net/og-image.png"> 
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://vxlinkhelper.yunlu18.net/">
+    <meta name="twitter:title" content="VX Link Helper - Clear, Safe Links">
+    <meta name="twitter:description" content="A lightweight extension to strip tracking parameters and generate gorgeous embeds.">
+    <meta name="twitter:image" content="https://vxlinkhelper.yunlu18.net/og-image.png">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
     <link rel="icon" type="image/png" href="icon128.png">
 </head>
@@ -19,7 +33,10 @@
                 <a href="#features" data-i18n="nav-features">功能特点</a>
                 <a href="#platforms" data-i18n="nav-platforms">支持平台</a>
                 <a href="#download-section" data-i18n="nav-download">获取扩展</a>
-                <button id="lang-toggle" class="lang-btn">English</button>
+                <select id="lang-select" class="lang-select">
+                    <option value="en">English</option>
+                    <option value="zh">简体中文</option>
+                </select>
             </nav>
         </div>
     </header>
@@ -34,28 +51,28 @@
                     <span class="btn-icon">🌐</span>
                     <div class="btn-text">
                         <small>Download for</small>
-                        <span>Chrome 商店下载</span>
+                        <span id="btn-chrome">Chrome 商店下载</span>
                     </div>
                 </a>
                 <a href="https://addons.mozilla.org/" target="_blank" class="btn-store firefox-btn">
                     <span class="btn-icon">🦊</span>
                     <div class="btn-text">
                         <small>Get it for</small>
-                        <span>Firefox 商店下载</span>
+                        <span id="btn-firefox">Firefox 商店下载</span>
                     </div>
                 </a>
                 <a href="https://apps.apple.com/" target="_blank" class="btn-store safari-btn">
                     <span class="btn-icon">🧭</span>
                     <div class="btn-text">
                         <small>Install on</small>
-                        <span>Safari 商店下载</span>
+                        <span id="btn-safari">Safari 商店下载</span>
                     </div>
                 </a>
                 <a href="https://github.com/YOUR_USERNAME/YOUR_EXTENSION_REPO/releases" target="_blank" class="btn-store zip-btn">
                     <span class="btn-icon">📦</span>
                     <div class="btn-text">
                         <small>Developer Mode</small>
-                        <span>下载独立离线包</span>
+                        <span id="btn-zip">下载独立离线包</span>
                     </div>
                 </a>
             </div>
@@ -63,12 +80,12 @@
             <div class="preview-box">
                 <div class="preview-line bad-url">
                     <span class="label" data-i18n="preview-original">原始链接:</span>
-                    <span class="url">https://www.bilibili.com/video/BV1xx411c7xx/?spm_id_from=333.788&share_source=copy_web&vd_source=123456</span>
+                    <span class="url" id="url-original"></span>
                 </div>
                 <div class="arrow-down" data-i18n="preview-arrow">⬇️ 自动净化参数并重写域名</div>
                 <div class="preview-line good-url">
                     <span class="label" data-i18n="preview-vx">VX 净化链接:</span>
-                    <span class="url">https://vxbilibili.com/video/BV1xx411c7xx/</span>
+                    <span class="url" id="url-vx"></span>
                 </div>
             </div>
         </div>
