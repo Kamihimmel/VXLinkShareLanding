@@ -1,145 +1,63 @@
 (() => {
   "use strict";
 
-  const STORE_KEY = "vx-mobile-web-settings-v1";
+  const STORE_KEY = "vx-mobile-web-settings-v2";
   const HISTORY_KEY = "vx-mobile-web-history-v1";
-  const TRACKERS = new Set([
-    "utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_content", "utm_id", "utm_custom",
-    "spm_id_from", "from_spmid", "from_spmid_from", "spmid", "spmid_from", "share_spmid", "vd_source",
-    "buvid", "buvid_from", "share_source", "share_source_mutation", "share_medium", "share_plat",
-    "share_session_id", "share_tag", "share_tag_id", "share_id", "share_medium_id", "share_plat_id",
-    "share_channel", "share_token", "share_origin", "share_session", "ref_src", "refer_url", "mao2_medium",
-    "mao2_source", "cover_shid", "shid", "track_id", "signCoverage", "msource", "bsource", "ssource",
-    "csource", "vc_name", "vc_source", "ha_source", "ha_method", "camp_id", "promotion_id", "ttk_id",
-    "union_source", "branch_pid", "fromsource"
-  ]);
+  const LANG_KEY = "vxlh-lang";
+  const SUPPORTED_LANGS = new Set(["en", "zh", "zh-TW", "es", "ar", "pt", "fr", "ja"]);
+  const I18N = {
+    en: { languageLabel: "Language", heroTitle: "Mobile VX Link Converter", heroSubtitle: "Paste, convert, copy, history, settings, and debugging run locally in your browser.", convertTitle: "Clipboard Convert", clipboardHint: "Tap the button to read clipboard and convert. Web apps cannot reliably read clipboard in the background.", pasteConvert: "Read Clipboard & Convert", convertInput: "Convert Input", manualInput: "Manual input", original: "Original", converted: "Converted", copyResult: "Copy", saveResult: "Save", shareResult: "Share", openResult: "Open", historyTitle: "History", clearHistory: "Clear", settingsTitle: "Settings", modeTitle: "Clipboard mode", modeManual: "Manual", modeRecommended: "Recommended", modeFast: "Fast", saveHistory: "Save history", convertedOnly: "Save converted links only", redditDomain: "Reddit domain", openHome: "Open project homepage", debugTitle: "Debug panel", tabConvert: "Convert", tabHistory: "History", tabSettings: "Settings", tabDebug: "Debug", emptyHistory: "No history yet.", copied: "Copied", saved: "Saved", unsupportedShare: "Web Share API is not available here", cleaned: "params cleaned", b23Note: "b23.tv is a Bilibili mobile short link. The web app cleans known params and preserves it without network expansion." },
+    zh: { languageLabel: "语言", heroTitle: "手机端 VX 链接转换器", heroSubtitle: "粘贴、转换、复制、历史、设置和调试都在浏览器本地完成。", convertTitle: "剪贴板转换", clipboardHint: "点击按钮读取剪贴板并转换。Web App 不能稳定后台读取剪贴板。", pasteConvert: "读取剪贴板并转换", convertInput: "转换输入框", manualInput: "手动输入", original: "原始链接", converted: "转换结果", copyResult: "复制结果", saveResult: "保存历史", shareResult: "系统分享", openResult: "打开", historyTitle: "转换历史", clearHistory: "清空", settingsTitle: "设置", modeTitle: "剪贴板模式", modeManual: "手动模式", modeRecommended: "推荐模式", modeFast: "快捷模式", saveHistory: "保存历史", convertedOnly: "仅保存转换后链接", redditDomain: "Reddit 域名", openHome: "打开项目主页", debugTitle: "调试面板", tabConvert: "转换", tabHistory: "历史", tabSettings: "设置", tabDebug: "调试", emptyHistory: "暂无历史。", copied: "已复制", saved: "已保存", unsupportedShare: "当前浏览器不支持 Web Share API", cleaned: "个参数已清理", b23Note: "b23.tv 是移动端 Bilibili 短链，Web App 本地不联网展开，已清理可识别参数并保留短链。" },
+    "zh-TW": { languageLabel: "語言", heroTitle: "手機端 VX 連結轉換器", heroSubtitle: "貼上、轉換、複製、歷史、設定與除錯都在瀏覽器本機完成。", convertTitle: "剪貼簿轉換", clipboardHint: "點擊按鈕讀取剪貼簿並轉換。Web App 無法穩定在背景讀取剪貼簿。", pasteConvert: "讀取剪貼簿並轉換", convertInput: "轉換輸入框", manualInput: "手動輸入", original: "原始連結", converted: "轉換結果", copyResult: "複製結果", saveResult: "儲存歷史", shareResult: "系統分享", openResult: "開啟", historyTitle: "轉換歷史", clearHistory: "清空", settingsTitle: "設定", modeTitle: "剪貼簿模式", modeManual: "手動模式", modeRecommended: "推薦模式", modeFast: "快捷模式", saveHistory: "儲存歷史", convertedOnly: "只儲存轉換後連結", redditDomain: "Reddit 網域", openHome: "開啟專案首頁", debugTitle: "除錯面板", tabConvert: "轉換", tabHistory: "歷史", tabSettings: "設定", tabDebug: "除錯", emptyHistory: "尚無歷史。", copied: "已複製", saved: "已儲存", unsupportedShare: "目前瀏覽器不支援 Web Share API", cleaned: "個參數已清理", b23Note: "b23.tv 是 Bilibili 行動短連結，Web App 不連網展開，只清理可辨識參數並保留短連結。" },
+    es: { languageLabel: "Idioma", heroTitle: "Convertidor móvil de enlaces VX", heroSubtitle: "Pegar, convertir, copiar, historial, ajustes y depuración se ejecutan localmente en el navegador.", convertTitle: "Convertir portapapeles", clipboardHint: "Toca el botón para leer el portapapeles y convertir. Una web app no puede leerlo de fondo con fiabilidad.", pasteConvert: "Leer y convertir", convertInput: "Convertir entrada", manualInput: "Entrada manual", original: "Original", converted: "Convertido", copyResult: "Copiar", saveResult: "Guardar", shareResult: "Compartir", openResult: "Abrir", historyTitle: "Historial", clearHistory: "Borrar", settingsTitle: "Ajustes", modeTitle: "Modo de portapapeles", modeManual: "Manual", modeRecommended: "Recomendado", modeFast: "Rápido", saveHistory: "Guardar historial", convertedOnly: "Guardar solo convertido", redditDomain: "Dominio Reddit", openHome: "Abrir página del proyecto", debugTitle: "Panel de depuración", tabConvert: "Convertir", tabHistory: "Historial", tabSettings: "Ajustes", tabDebug: "Debug", emptyHistory: "Sin historial.", copied: "Copiado", saved: "Guardado", unsupportedShare: "Web Share API no está disponible", cleaned: "parámetros limpiados", b23Note: "b23.tv es un enlace corto móvil de Bilibili; se conserva sin expansión de red." },
+    ar: { languageLabel: "اللغة", heroTitle: "محول روابط VX للجوال", heroSubtitle: "اللصق والتحويل والنسخ والسجل والإعدادات والتصحيح تتم محلياً في المتصفح.", convertTitle: "تحويل الحافظة", clipboardHint: "اضغط الزر لقراءة الحافظة والتحويل. تطبيقات الويب لا تقرأ الحافظة في الخلفية بشكل موثوق.", pasteConvert: "قراءة الحافظة والتحويل", convertInput: "تحويل الإدخال", manualInput: "إدخال يدوي", original: "الأصلي", converted: "المحوّل", copyResult: "نسخ", saveResult: "حفظ", shareResult: "مشاركة", openResult: "فتح", historyTitle: "السجل", clearHistory: "مسح", settingsTitle: "الإعدادات", modeTitle: "وضع الحافظة", modeManual: "يدوي", modeRecommended: "موصى به", modeFast: "سريع", saveHistory: "حفظ السجل", convertedOnly: "حفظ الرابط المحوّل فقط", redditDomain: "نطاق Reddit", openHome: "فتح صفحة المشروع", debugTitle: "لوحة التصحيح", tabConvert: "تحويل", tabHistory: "السجل", tabSettings: "إعدادات", tabDebug: "تصحيح", emptyHistory: "لا يوجد سجل.", copied: "تم النسخ", saved: "تم الحفظ", unsupportedShare: "Web Share API غير متاح", cleaned: "معلمات أزيلت", b23Note: "b23.tv رابط Bilibili قصير للجوال؛ يتم تنظيفه محلياً دون توسيع عبر الشبكة." },
+    pt: { languageLabel: "Idioma", heroTitle: "Conversor móvel de links VX", heroSubtitle: "Colar, converter, copiar, histórico, ajustes e debug rodam localmente no navegador.", convertTitle: "Converter área de transferência", clipboardHint: "Toque para ler a área de transferência e converter. Web apps não leem em segundo plano de forma confiável.", pasteConvert: "Ler e converter", convertInput: "Converter entrada", manualInput: "Entrada manual", original: "Original", converted: "Convertido", copyResult: "Copiar", saveResult: "Salvar", shareResult: "Compartilhar", openResult: "Abrir", historyTitle: "Histórico", clearHistory: "Limpar", settingsTitle: "Ajustes", modeTitle: "Modo da área de transferência", modeManual: "Manual", modeRecommended: "Recomendado", modeFast: "Rápido", saveHistory: "Salvar histórico", convertedOnly: "Salvar só convertido", redditDomain: "Domínio Reddit", openHome: "Abrir página do projeto", debugTitle: "Painel de debug", tabConvert: "Converter", tabHistory: "Histórico", tabSettings: "Ajustes", tabDebug: "Debug", emptyHistory: "Sem histórico.", copied: "Copiado", saved: "Salvo", unsupportedShare: "Web Share API indisponível", cleaned: "parâmetros limpos", b23Note: "b23.tv é um link curto móvel do Bilibili; preservado sem expansão de rede." },
+    fr: { languageLabel: "Langue", heroTitle: "Convertisseur mobile de liens VX", heroSubtitle: "Coller, convertir, copier, historique, réglages et debug restent locaux dans le navigateur.", convertTitle: "Convertir le presse-papiers", clipboardHint: "Touchez le bouton pour lire le presse-papiers et convertir. Une web app ne peut pas le lire en arrière-plan de façon fiable.", pasteConvert: "Lire et convertir", convertInput: "Convertir l’entrée", manualInput: "Saisie manuelle", original: "Original", converted: "Converti", copyResult: "Copier", saveResult: "Enregistrer", shareResult: "Partager", openResult: "Ouvrir", historyTitle: "Historique", clearHistory: "Effacer", settingsTitle: "Réglages", modeTitle: "Mode presse-papiers", modeManual: "Manuel", modeRecommended: "Recommandé", modeFast: "Rapide", saveHistory: "Enregistrer l’historique", convertedOnly: "Seulement le lien converti", redditDomain: "Domaine Reddit", openHome: "Ouvrir la page du projet", debugTitle: "Panneau debug", tabConvert: "Convertir", tabHistory: "Historique", tabSettings: "Réglages", tabDebug: "Debug", emptyHistory: "Aucun historique.", copied: "Copié", saved: "Enregistré", unsupportedShare: "Web Share API indisponible", cleaned: "paramètres nettoyés", b23Note: "b23.tv est un lien court mobile Bilibili; conservé sans résolution réseau." },
+    ja: { languageLabel: "言語", heroTitle: "モバイル VX リンク変換", heroSubtitle: "貼り付け、変換、コピー、履歴、設定、デバッグはブラウザ内でローカルに動作します。", convertTitle: "クリップボード変換", clipboardHint: "ボタンを押してクリップボードを読み取り変換します。Web App はバックグラウンド読み取りを安定して行えません。", pasteConvert: "読み取って変換", convertInput: "入力を変換", manualInput: "手動入力", original: "元リンク", converted: "変換結果", copyResult: "コピー", saveResult: "履歴保存", shareResult: "共有", openResult: "開く", historyTitle: "履歴", clearHistory: "消去", settingsTitle: "設定", modeTitle: "クリップボードモード", modeManual: "手動", modeRecommended: "推奨", modeFast: "高速", saveHistory: "履歴を保存", convertedOnly: "変換後のみ保存", redditDomain: "Reddit ドメイン", openHome: "プロジェクトページを開く", debugTitle: "デバッグパネル", tabConvert: "変換", tabHistory: "履歴", tabSettings: "設定", tabDebug: "Debug", emptyHistory: "履歴はありません。", copied: "コピーしました", saved: "保存しました", unsupportedShare: "Web Share API は利用できません", cleaned: "個のパラメータを削除", b23Note: "b23.tv は Bilibili のモバイル短縮リンクです。ネットワーク展開せず保持します。" }
+  };
+  const TRACKERS = new Set(["utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_content", "utm_id", "utm_custom", "spm_id_from", "from_spmid", "from_spmid_from", "spmid", "spmid_from", "share_spmid", "vd_source", "buvid", "buvid_from", "share_source", "share_source_mutation", "share_medium", "share_plat", "share_session_id", "share_tag", "share_tag_id", "share_id", "share_medium_id", "share_plat_id", "share_channel", "share_token", "share_origin", "share_session", "ref_src", "refer_url", "mao2_medium", "mao2_source", "cover_shid", "shid", "track_id", "signCoverage", "msource", "bsource", "ssource", "csource", "vc_name", "vc_source", "ha_source", "ha_method", "camp_id", "promotion_id", "ttk_id", "union_source", "branch_pid", "fromsource"]);
   const SITE_TRACKERS = new Set(["s", "from", "goto", "forward", "intro", "network", "platform", "session_id", "timestamp", "ts", "fr", "nm", "mx", "attach", "argv", "extension", "screenName", "seid", "plat_id", "webid", "bbid", "unique_k", "is_story_h5", "auto_play", "wifiAutoPlay", "preview_template", "mobile_pkg", "t"]);
   const BILI_ALLOWED = new Set(["p", "t", "ep_id", "season_id", "ssid", "cid", "aid", "bvid"]);
-
   const $ = (id) => document.getElementById(id);
-  const state = { settings: loadSettings(), result: null, deferredInstall: null };
+  const safeJson = (raw, fallback) => { try { return raw ? JSON.parse(raw) : fallback; } catch { return fallback; } };
+  const normalizeLanguage = (lang) => { const l = String(lang || "").toLowerCase(); if (l.includes("hant") || l === "zh-tw" || l === "zh-hk" || l === "zh-mo") return "zh-TW"; const p = l.split("-")[0]; return SUPPORTED_LANGS.has(p) ? p : "en"; };
+  const state = { settings: loadSettings(), result: null, lang: SUPPORTED_LANGS.has(localStorage.getItem(LANG_KEY)) ? localStorage.getItem(LANG_KEY) : normalizeLanguage(navigator.language), currentTab: "convert" };
+  const t = (key) => (I18N[state.lang] || I18N.en)[key] || I18N.en[key] || key;
 
-  function loadSettings() {
-    return { mode: "recommended", saveHistory: true, convertedOnly: false, siteX: true, siteReddit: true, siteBilibili: true, sitePixiv: true, redditDomain: "vxreddit.com", ...safeJson(localStorage.getItem(STORE_KEY), {}) };
-  }
+  function loadSettings() { return { mode: "recommended", saveHistory: true, convertedOnly: false, siteX: true, siteReddit: true, siteBilibili: true, sitePixiv: true, redditDomain: "vxreddit.com", ...safeJson(localStorage.getItem(STORE_KEY), {}) }; }
   function saveSettings() { localStorage.setItem(STORE_KEY, JSON.stringify(state.settings)); }
   function history() { return safeJson(localStorage.getItem(HISTORY_KEY), []); }
   function setHistory(items) { localStorage.setItem(HISTORY_KEY, JSON.stringify(items.slice(0, 100))); }
-  function safeJson(raw, fallback) { try { return raw ? JSON.parse(raw) : fallback; } catch { return fallback; } }
   function normalizeHost(host) { return host.toLowerCase().replace(/^www\./, ""); }
   function stripParams(url, blocked, cleaned) { [...url.searchParams.keys()].forEach((key) => { if (blocked.has(key)) { url.searchParams.delete(key); cleaned.add(key); } }); }
   function allowOnly(url, allowed, cleaned) { [...url.searchParams.keys()].forEach((key) => { if (!allowed.has(key)) { url.searchParams.delete(key); cleaned.add(key); } }); }
+  function escapeHtml(s) { return String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c])); }
 
   function convert(input) {
-    const raw = input.trim();
-    if (!raw) return { ok: false, error: "empty input" };
-    let url;
-    try { url = new URL(raw); } catch { return { ok: false, error: "invalid URL" }; }
-    const original = url.toString();
-    const cleaned = new Set();
-    stripParams(url, TRACKERS, cleaned);
-    const host = normalizeHost(url.hostname);
-    let siteKey = "generic", siteLabel = "Generic cleanup", note = "";
-
-    if (["x.com", "twitter.com", "mobile.x.com", "mobile.twitter.com"].includes(host) && state.settings.siteX) {
-      stripParams(url, SITE_TRACKERS, cleaned); url.hostname = "vxtwitter.com"; url.hash = ""; siteKey = "x"; siteLabel = "X / Twitter";
-    } else if ((host === "reddit.com" || host.endsWith(".reddit.com")) && state.settings.siteReddit) {
-      stripParams(url, SITE_TRACKERS, cleaned); url.hostname = state.settings.redditDomain; url.hash = ""; siteKey = "reddit"; siteLabel = "Reddit";
-    } else if (host === "pixiv.net" && state.settings.sitePixiv) {
-      stripParams(url, SITE_TRACKERS, cleaned); url.hostname = "phixiv.net"; url.hash = ""; siteKey = "pixiv"; siteLabel = "Pixiv";
-    } else if ((host === "bilibili.com" || host.endsWith(".bilibili.com") || host === "b23.tv") && state.settings.siteBilibili) {
-      siteKey = "bilibili"; siteLabel = "Bilibili";
-      if (host === "b23.tv") {
-        stripParams(url, SITE_TRACKERS, cleaned);
-        note = "b23.tv 是移动端 Bilibili 短链，Web App 本地不联网展开，已清理可识别参数并保留短链。";
-      } else {
-        allowOnly(url, BILI_ALLOWED, cleaned); url.hostname = "vxbilibili.com"; url.hash = "";
-      }
-    }
+    const raw = input.trim(); if (!raw) return { ok: false, error: "empty input" };
+    let url; try { url = new URL(raw); } catch { return { ok: false, error: "invalid URL" }; }
+    const original = url.toString(); const cleaned = new Set(); stripParams(url, TRACKERS, cleaned);
+    const host = normalizeHost(url.hostname); let siteKey = "generic", siteLabel = "Generic cleanup", note = "";
+    if (["x.com", "twitter.com", "mobile.x.com", "mobile.twitter.com"].includes(host) && state.settings.siteX) { stripParams(url, SITE_TRACKERS, cleaned); url.hostname = "vxtwitter.com"; url.hash = ""; siteKey = "x"; siteLabel = "X / Twitter"; }
+    else if ((host === "reddit.com" || host.endsWith(".reddit.com")) && state.settings.siteReddit) { stripParams(url, SITE_TRACKERS, cleaned); url.hostname = state.settings.redditDomain; url.hash = ""; siteKey = "reddit"; siteLabel = "Reddit"; }
+    else if (host === "pixiv.net" && state.settings.sitePixiv) { stripParams(url, SITE_TRACKERS, cleaned); url.hostname = "phixiv.net"; url.hash = ""; siteKey = "pixiv"; siteLabel = "Pixiv"; }
+    else if ((host === "bilibili.com" || host.endsWith(".bilibili.com") || host === "b23.tv") && state.settings.siteBilibili) { siteKey = "bilibili"; siteLabel = "Bilibili"; if (host === "b23.tv") { stripParams(url, SITE_TRACKERS, cleaned); note = t("b23Note"); } else { allowOnly(url, BILI_ALLOWED, cleaned); url.hostname = "vxbilibili.com"; url.hash = ""; } }
     const output = siteKey === "generic" ? url.toString() : url.toString().replace(/\/+$/, "");
     return { ok: true, changed: output !== original, input: raw, output, siteKey, siteLabel, cleaned: [...cleaned].sort(), note };
   }
 
-  async function readClipboard() {
-    if (!navigator.clipboard?.readText) throw new Error("Clipboard readText is not available in this browser/context.");
-    return navigator.clipboard.readText();
-  }
-  async function writeClipboard(text) {
-    if (!navigator.clipboard?.writeText) throw new Error("Clipboard writeText is not available in this browser/context.");
-    return navigator.clipboard.writeText(text);
-  }
-  function renderResult(result) {
-    state.result = result;
-    if (!result.ok) { toast(result.error); return; }
-    $("resultCard").hidden = false;
-    $("siteBadge").textContent = result.siteLabel;
-    $("cleanedCount").textContent = `${result.cleaned.length} params cleaned`;
-    $("originalUrl").textContent = result.input;
-    $("convertedUrl").textContent = result.output;
-    $("openBtn").href = result.output;
-    $("resultNote").hidden = !result.note;
-    $("resultNote").textContent = result.note;
-  }
-  async function convertAndCopy(text, autoSave = true) {
-    const result = convert(text);
-    renderResult(result);
-    if (!result.ok) return;
-    if (result.changed) {
-      try { await writeClipboard(result.output); toast("已转换并复制到剪贴板"); } catch (err) { toast(`已转换，但复制失败：${err.message}`); }
-      if (autoSave && state.settings.saveHistory) saveHistory(result);
-    } else {
-      toast("没有可转换内容，已显示清理结果");
-    }
-  }
-  function saveHistory(result) {
-    if (!result?.ok) return;
-    const item = { id: crypto.randomUUID?.() || `${Date.now()}-${Math.random()}`, createdAt: new Date().toISOString(), siteLabel: result.siteLabel, original: state.settings.convertedOnly ? "" : result.input, output: result.output, cleaned: result.cleaned };
-    setHistory([item, ...history()]); renderHistory();
-  }
-  function renderHistory() {
-    const list = $("historyList"); const items = history();
-    if (!items.length) { list.innerHTML = '<div class="history-empty">暂无历史。转换后可自动保存，或手动保存当前结果。</div>'; return; }
-    list.innerHTML = items.map((item) => `<article class="history-item"><header><strong>${escapeHtml(item.siteLabel)}</strong><time>${new Date(item.createdAt).toLocaleString()}</time></header>${item.original ? `<p class="muted">${escapeHtml(item.original)}</p>` : ""}<code>${escapeHtml(item.output)}</code><div class="button-row compact"><button class="secondary-btn" data-copy="${escapeHtml(item.output)}">Copy</button><button class="secondary-btn" data-del="${item.id}">Delete</button></div></article>`).join("");
-  }
-  function escapeHtml(s) { return String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c])); }
-  function toast(message) { const el = $("toast"); el.textContent = message; el.hidden = false; clearTimeout(toast.t); toast.t = setTimeout(() => { el.hidden = true; }, 3300); }
-  function updateDebug() {
-    $("debugOutput").textContent = JSON.stringify({ userAgent: navigator.userAgent, standalone: window.matchMedia("(display-mode: standalone)").matches || navigator.standalone === true, clipboardRead: Boolean(navigator.clipboard?.readText), clipboardWrite: Boolean(navigator.clipboard?.writeText), webShare: Boolean(navigator.share), serviceWorker: "serviceWorker" in navigator, settings: state.settings, historyCount: history().length }, null, 2);
-  }
-  function selfTest() {
-    const cases = [
-      ["https://x.com/user/status/1?s=20&t=abc", "https://vxtwitter.com/user/status/1"],
-      ["https://reddit.com/r/a/comments/b/c/?utm_source=share", `https://${state.settings.redditDomain}/r/a/comments/b/c`],
-      ["https://www.bilibili.com/video/BV1/?spm_id_from=1&p=2&vd_source=x", "https://vxbilibili.com/video/BV1/?p=2"],
-      ["https://b23.tv/AbCd?share_source=copy_link", "https://b23.tv/AbCd"],
-      ["https://www.pixiv.net/artworks/123?utm_source=x", "https://phixiv.net/artworks/123"]
-    ];
-    return cases.map(([input, expected]) => ({ input, expected, actual: convert(input).output, pass: convert(input).output === expected }));
-  }
-  function bindSettings() {
-    document.querySelector(`input[name="mode"][value="${state.settings.mode}"]`).checked = true;
-    ["saveHistory", "convertedOnly", "siteX", "siteReddit", "siteBilibili", "sitePixiv"].forEach((id) => { $(id).checked = state.settings[id]; $(id).addEventListener("change", () => { state.settings[id] = $(id).checked; saveSettings(); updateDebug(); }); });
-    $("redditDomain").value = state.settings.redditDomain;
-    $("redditDomain").addEventListener("change", () => { state.settings.redditDomain = $("redditDomain").value; saveSettings(); updateDebug(); });
-    document.querySelectorAll('input[name="mode"]').forEach((input) => input.addEventListener("change", () => { state.settings.mode = input.value; saveSettings(); updateDebug(); }));
-  }
-
-  function boot() {
-    bindSettings(); renderHistory(); updateDebug();
-    $("capabilityBadge").textContent = navigator.clipboard ? "clipboard API" : "manual only";
-    $("pasteConvertBtn").addEventListener("click", async () => { try { await convertAndCopy(await readClipboard()); } catch (err) { toast(err.message); } });
-    $("convertInputBtn").addEventListener("click", () => convertAndCopy($("sourceInput").value));
-    $("copyBtn").addEventListener("click", async () => { if (state.result?.ok) { await writeClipboard(state.result.output); toast("已复制结果"); } });
-    $("saveBtn").addEventListener("click", () => { if (state.result?.ok) { saveHistory(state.result); toast("已保存历史"); } });
-    $("webShareBtn").addEventListener("click", async () => { if (!state.result?.ok) return; if (navigator.share) await navigator.share({ title: "VX Link", text: state.result.output, url: state.result.output }); else toast("当前浏览器不支持 Web Share API"); });
-    $("clearHistoryBtn").addEventListener("click", () => { setHistory([]); renderHistory(); updateDebug(); });
-    $("historyList").addEventListener("click", async (event) => { const copy = event.target.closest("[data-copy]"); const del = event.target.closest("[data-del]"); if (copy) { await writeClipboard(copy.dataset.copy); toast("已复制历史链接"); } if (del) { setHistory(history().filter((item) => item.id !== del.dataset.del)); renderHistory(); updateDebug(); } });
-    $("debugToggle").addEventListener("click", () => { $("debugPanel").hidden = !$("debugPanel").hidden; updateDebug(); });
-    $("runSelfTestBtn").addEventListener("click", () => { $("debugOutput").textContent = JSON.stringify({ selfTest: selfTest(), debug: safeJson($("debugOutput").textContent, {}) }, null, 2); });
-    window.addEventListener("beforeinstallprompt", (event) => { event.preventDefault(); state.deferredInstall = event; $("installBtn").hidden = false; });
-    $("installBtn").addEventListener("click", async () => { if (state.deferredInstall) { state.deferredInstall.prompt(); state.deferredInstall = null; $("installBtn").hidden = true; } });
-    if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(() => {});
-    window.addEventListener("focus", async () => { if (state.settings.mode === "fast") { try { await convertAndCopy(await readClipboard()); } catch { /* browser may reject without user gesture */ } } });
-  }
+  async function readClipboard() { if (!navigator.clipboard?.readText) throw new Error("Clipboard readText is not available in this browser/context."); return navigator.clipboard.readText(); }
+  async function writeClipboard(text) { if (!navigator.clipboard?.writeText) throw new Error("Clipboard writeText is not available in this browser/context."); return navigator.clipboard.writeText(text); }
+  function toast(message) { const el = $("toast"); el.textContent = message; el.hidden = false; clearTimeout(toast.timer); toast.timer = setTimeout(() => { el.hidden = true; }, 3200); }
+  function renderResult(result) { state.result = result; if (!result.ok) { toast(result.error); return; } $("resultCard").hidden = false; $("siteBadge").textContent = result.siteLabel; $("cleanedCount").textContent = `${result.cleaned.length} ${t("cleaned")}`; $("originalUrl").textContent = result.input; $("convertedUrl").textContent = result.output; $("openBtn").href = result.output; $("resultNote").hidden = !result.note; $("resultNote").textContent = result.note; }
+  async function convertAndCopy(text, autoSave = true) { const result = convert(text); renderResult(result); if (!result.ok) return; if (result.changed) { try { await writeClipboard(result.output); toast(t("copied")); } catch (err) { toast(`Converted, copy failed: ${err.message}`); } if (autoSave && state.settings.saveHistory) saveHistory(result); } }
+  function saveHistory(result) { if (!result?.ok) return; const item = { id: crypto.randomUUID?.() || `${Date.now()}-${Math.random()}`, createdAt: new Date().toISOString(), siteLabel: result.siteLabel, original: state.settings.convertedOnly ? "" : result.input, output: result.output, cleaned: result.cleaned }; setHistory([item, ...history()]); renderHistory(); }
+  function renderHistory() { const list = $("historyList"); const items = history(); if (!items.length) { list.innerHTML = `<div class="history-empty">${escapeHtml(t("emptyHistory"))}</div>`; return; } list.innerHTML = items.map((item) => `<article class="history-item"><header><strong>${escapeHtml(item.siteLabel)}</strong><time>${new Date(item.createdAt).toLocaleString()}</time></header>${item.original ? `<p class="muted">${escapeHtml(item.original)}</p>` : ""}<code>${escapeHtml(item.output)}</code><div class="button-row compact"><button class="secondary-btn" data-copy="${escapeHtml(item.output)}">${escapeHtml(t("copyResult"))}</button><button class="secondary-btn" data-del="${item.id}">Delete</button></div></article>`).join(""); }
+  function updateDebug() { $("debugOutput").textContent = JSON.stringify({ userAgent: navigator.userAgent, lang: state.lang, standalone: window.matchMedia("(display-mode: standalone)").matches || navigator.standalone === true, clipboardRead: Boolean(navigator.clipboard?.readText), clipboardWrite: Boolean(navigator.clipboard?.writeText), webShare: Boolean(navigator.share), serviceWorker: "serviceWorker" in navigator, tab: state.currentTab, settings: state.settings, historyCount: history().length }, null, 2); }
+  function selfTest() { const cases = [["https://x.com/user/status/1?s=20&t=abc", "https://vxtwitter.com/user/status/1"], ["https://reddit.com/r/a/comments/b/c/?utm_source=share", `https://${state.settings.redditDomain}/r/a/comments/b/c`], ["https://www.bilibili.com/video/BV1/?spm_id_from=1&p=2&vd_source=x", "https://vxbilibili.com/video/BV1/?p=2"], ["https://b23.tv/AbCd?share_source=copy_link", "https://b23.tv/AbCd"], ["https://www.pixiv.net/artworks/123?utm_source=x", "https://phixiv.net/artworks/123"]]; return cases.map(([input, expected]) => ({ input, expected, actual: convert(input).output, pass: convert(input).output === expected })); }
+  function applyI18n() { document.documentElement.lang = state.lang === "zh-TW" ? "zh-Hant" : state.lang; document.documentElement.dir = state.lang === "ar" ? "rtl" : "ltr"; document.querySelectorAll("[data-i18n]").forEach((el) => { el.textContent = t(el.dataset.i18n); }); $("langSelect").value = state.lang; renderHistory(); if (state.result) renderResult(state.result); updateDebug(); }
+  function switchTab(tab) { state.currentTab = tab; document.querySelectorAll(".tab-page").forEach((page) => page.classList.toggle("active", page.dataset.page === tab)); document.querySelectorAll(".bottom-tabs [data-tab]").forEach((button) => button.classList.toggle("active", button.dataset.tab === tab)); if (tab === "debug") updateDebug(); window.scrollTo({ top: 0, behavior: "instant" }); }
+  function bindSettings() { document.querySelector(`input[name="mode"][value="${state.settings.mode}"]`).checked = true; ["saveHistory", "convertedOnly", "siteX", "siteReddit", "siteBilibili", "sitePixiv"].forEach((id) => { $(id).checked = state.settings[id]; $(id).addEventListener("change", () => { state.settings[id] = $(id).checked; saveSettings(); updateDebug(); }); }); $("redditDomain").value = state.settings.redditDomain; $("redditDomain").addEventListener("change", () => { state.settings.redditDomain = $("redditDomain").value; saveSettings(); updateDebug(); }); document.querySelectorAll('input[name="mode"]').forEach((input) => input.addEventListener("change", () => { state.settings.mode = input.value; saveSettings(); updateDebug(); })); }
+  function boot() { bindSettings(); applyI18n(); $("capabilityBadge").textContent = navigator.clipboard ? "clipboard API" : "manual only"; $("pasteConvertBtn").addEventListener("click", async () => { try { await convertAndCopy(await readClipboard()); } catch (err) { toast(err.message); } }); $("convertInputBtn").addEventListener("click", () => convertAndCopy($("sourceInput").value)); $("copyBtn").addEventListener("click", async () => { if (state.result?.ok) { await writeClipboard(state.result.output); toast(t("copied")); } }); $("saveBtn").addEventListener("click", () => { if (state.result?.ok) { saveHistory(state.result); toast(t("saved")); } }); $("webShareBtn").addEventListener("click", async () => { if (!state.result?.ok) return; if (navigator.share) await navigator.share({ title: "VX Link", text: state.result.output, url: state.result.output }); else toast(t("unsupportedShare")); }); $("clearHistoryBtn").addEventListener("click", () => { setHistory([]); renderHistory(); updateDebug(); }); $("historyList").addEventListener("click", async (event) => { const copy = event.target.closest("[data-copy]"); const del = event.target.closest("[data-del]"); if (copy) { await writeClipboard(copy.dataset.copy); toast(t("copied")); } if (del) { setHistory(history().filter((item) => item.id !== del.dataset.del)); renderHistory(); updateDebug(); } }); $("runSelfTestBtn").addEventListener("click", () => { $("debugOutput").textContent = JSON.stringify({ selfTest: selfTest(), debug: safeJson($("debugOutput").textContent, {}) }, null, 2); }); $("langSelect").addEventListener("change", (event) => { state.lang = SUPPORTED_LANGS.has(event.target.value) ? event.target.value : "en"; localStorage.setItem(LANG_KEY, state.lang); applyI18n(); }); document.querySelectorAll(".bottom-tabs [data-tab]").forEach((button) => button.addEventListener("click", () => switchTab(button.dataset.tab))); if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(() => {}); window.addEventListener("focus", async () => { if (state.settings.mode === "fast") { try { await convertAndCopy(await readClipboard()); } catch { /* browsers may reject without user gesture */ } } }); }
   document.addEventListener("DOMContentLoaded", boot);
 })();
