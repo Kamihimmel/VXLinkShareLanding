@@ -24,6 +24,11 @@
   const state = { settings: loadSettings(), result: null, lang: SUPPORTED_LANGS.has(localStorage.getItem(LANG_KEY)) ? localStorage.getItem(LANG_KEY) : normalizeLanguage(navigator.language), currentTab: "convert" };
   const t = (key) => (I18N[state.lang] || I18N.en)[key] || I18N.en[key] || key;
 
+  function extractFirstUrl(input) {
+    const match = String(input).match(/https?:\/\/[^\s<>()\[\]{}"'，。！？；：、]+/i);
+    return match ? match[0] : String(input).trim();
+  }
+
   function loadSettings() { return { mode: "recommended", saveHistory: true, convertedOnly: false, siteX: true, siteReddit: true, siteBilibili: true, sitePixiv: true, redditDomain: "vxreddit.com", ...safeJson(localStorage.getItem(STORE_KEY), {}) }; }
   function saveSettings() { localStorage.setItem(STORE_KEY, JSON.stringify(state.settings)); }
   function history() { return safeJson(localStorage.getItem(HISTORY_KEY), []); }
@@ -34,8 +39,9 @@
   function escapeHtml(s) { return String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c])); }
 
   function convert(input) {
-    const raw = input.trim(); if (!raw) return { ok: false, error: "empty input" };
-    let url; try { url = new URL(raw); } catch { return { ok: false, error: "invalid URL" }; }
+    const raw = String(input).trim(); if (!raw) return { ok: false, error: "empty input" };
+    const extracted = extractFirstUrl(raw);
+    let url; try { url = new URL(extracted); } catch { return { ok: false, error: "invalid URL" }; }
     const original = url.toString(); const cleaned = new Set(); stripParams(url, TRACKERS, cleaned);
     const host = normalizeHost(url.hostname); let siteKey = "generic", siteLabel = "Generic cleanup", note = "";
     if (["x.com", "twitter.com", "mobile.x.com", "mobile.twitter.com"].includes(host) && state.settings.siteX) { stripParams(url, SITE_TRACKERS, cleaned); url.hostname = "vxtwitter.com"; url.hash = ""; siteKey = "x"; siteLabel = "X / Twitter"; }
@@ -43,7 +49,7 @@
     else if (host === "pixiv.net" && state.settings.sitePixiv) { stripParams(url, SITE_TRACKERS, cleaned); url.hostname = "phixiv.net"; url.hash = ""; siteKey = "pixiv"; siteLabel = "Pixiv"; }
     else if ((host === "bilibili.com" || host.endsWith(".bilibili.com") || host === "b23.tv") && state.settings.siteBilibili) { siteKey = "bilibili"; siteLabel = "Bilibili"; if (host === "b23.tv") { stripParams(url, SITE_TRACKERS, cleaned); note = t("b23Note"); } else { allowOnly(url, BILI_ALLOWED, cleaned); url.hostname = "vxbilibili.com"; url.hash = ""; } }
     const output = siteKey === "generic" ? url.toString() : url.toString().replace(/\/+$/, "");
-    return { ok: true, changed: output !== original, input: raw, output, siteKey, siteLabel, cleaned: [...cleaned].sort(), note };
+    return { ok: true, changed: output !== original || raw !== extracted, input: raw, extracted, output, siteKey, siteLabel, cleaned: [...cleaned].sort(), note };
   }
 
   async function readClipboard() { if (!navigator.clipboard?.readText) throw new Error("Clipboard readText is not available in this browser/context."); return navigator.clipboard.readText(); }
@@ -54,7 +60,7 @@
   function saveHistory(result) { if (!result?.ok) return; const item = { id: crypto.randomUUID?.() || `${Date.now()}-${Math.random()}`, createdAt: new Date().toISOString(), siteLabel: result.siteLabel, original: state.settings.convertedOnly ? "" : result.input, output: result.output, cleaned: result.cleaned }; setHistory([item, ...history()]); renderHistory(); }
   function renderHistory() { const list = $("historyList"); const items = history(); if (!items.length) { list.innerHTML = `<div class="history-empty">${escapeHtml(t("emptyHistory"))}</div>`; return; } list.innerHTML = items.map((item) => `<article class="history-item"><header><strong>${escapeHtml(item.siteLabel)}</strong><time>${new Date(item.createdAt).toLocaleString()}</time></header>${item.original ? `<p class="muted">${escapeHtml(item.original)}</p>` : ""}<code>${escapeHtml(item.output)}</code><div class="button-row compact"><button class="secondary-btn" data-copy="${escapeHtml(item.output)}">${escapeHtml(t("copyResult"))}</button><button class="secondary-btn" data-del="${item.id}">Delete</button></div></article>`).join(""); }
   function updateDebug() { $("debugOutput").textContent = JSON.stringify({ userAgent: navigator.userAgent, lang: state.lang, standalone: window.matchMedia("(display-mode: standalone)").matches || navigator.standalone === true, clipboardRead: Boolean(navigator.clipboard?.readText), clipboardWrite: Boolean(navigator.clipboard?.writeText), webShare: Boolean(navigator.share), serviceWorker: "serviceWorker" in navigator, tab: state.currentTab, settings: state.settings, historyCount: history().length }, null, 2); }
-  function selfTest() { const cases = [["https://x.com/user/status/1?s=20&t=abc", "https://vxtwitter.com/user/status/1"], ["https://reddit.com/r/a/comments/b/c/?utm_source=share", `https://${state.settings.redditDomain}/r/a/comments/b/c`], ["https://www.bilibili.com/video/BV1/?spm_id_from=1&p=2&vd_source=x", "https://vxbilibili.com/video/BV1/?p=2"], ["https://b23.tv/AbCd?share_source=copy_link", "https://b23.tv/AbCd"], ["https://www.pixiv.net/artworks/123?utm_source=x", "https://phixiv.net/artworks/123"]]; return cases.map(([input, expected]) => ({ input, expected, actual: convert(input).output, pass: convert(input).output === expected })); }
+  function selfTest() { const cases = [["https://x.com/user/status/1?s=20&t=abc", "https://vxtwitter.com/user/status/1"], ["https://reddit.com/r/a/comments/b/c/?utm_source=share", `https://${state.settings.redditDomain}/r/a/comments/b/c`], ["https://www.bilibili.com/video/BV1/?spm_id_from=1&p=2&vd_source=x", "https://vxbilibili.com/video/BV1/?p=2"], ["https://b23.tv/AbCd?share_source=copy_link", "https://b23.tv/AbCd"], ["【【熟肉】谁想要这种东西：特朗普手机骗局拆解 - MonkeyExplains】 https://b23.tv/06psX72", "https://b23.tv/06psX72"], ["https://www.pixiv.net/artworks/123?utm_source=x", "https://phixiv.net/artworks/123"]]; return cases.map(([input, expected]) => ({ input, expected, actual: convert(input).output, pass: convert(input).output === expected })); }
   function applyI18n() { document.documentElement.lang = state.lang === "zh-TW" ? "zh-Hant" : state.lang; document.documentElement.dir = state.lang === "ar" ? "rtl" : "ltr"; document.querySelectorAll("[data-i18n]").forEach((el) => { el.textContent = t(el.dataset.i18n); }); $("langSelect").value = state.lang; renderHistory(); if (state.result) renderResult(state.result); updateDebug(); }
   function switchTab(tab) { state.currentTab = tab; document.querySelectorAll(".tab-page").forEach((page) => page.classList.toggle("active", page.dataset.page === tab)); document.querySelectorAll(".bottom-tabs [data-tab]").forEach((button) => button.classList.toggle("active", button.dataset.tab === tab)); if (tab === "debug") updateDebug(); window.scrollTo({ top: 0, behavior: "instant" }); }
   function bindSettings() { document.querySelector(`input[name="mode"][value="${state.settings.mode}"]`).checked = true; ["saveHistory", "convertedOnly", "siteX", "siteReddit", "siteBilibili", "sitePixiv"].forEach((id) => { $(id).checked = state.settings[id]; $(id).addEventListener("change", () => { state.settings[id] = $(id).checked; saveSettings(); updateDebug(); }); }); $("redditDomain").value = state.settings.redditDomain; $("redditDomain").addEventListener("change", () => { state.settings.redditDomain = $("redditDomain").value; saveSettings(); updateDebug(); }); document.querySelectorAll('input[name="mode"]').forEach((input) => input.addEventListener("change", () => { state.settings.mode = input.value; saveSettings(); updateDebug(); })); }
