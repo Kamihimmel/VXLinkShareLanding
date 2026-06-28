@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>VX Link Helper App - Mobile Web Converter</title>
+  <meta name="description" content="VX Link Helper mobile web app: paste, convert, copy, and debug clean social links on iOS and Android browsers.">
+  <meta name="theme-color" content="#070b14">
+  <meta name="color-scheme" content="dark">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="VX Link">
+  <meta name="application-name" content="VX Link Helper">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="VX Link Helper Mobile Web App">
+  <meta property="og:description" content="Paste, convert, copy, and debug VX links on mobile browsers.">
+  <meta property="og:image" content="/og-image.png">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="icons/icon-180.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="icons/icon-152.png">
+  <link rel="apple-touch-icon" sizes="167x167" href="icons/icon-167.png">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="background-tech" aria-hidden="true"><span></span><span></span><span></span></div>
+  <header class="app-header">
+    <a class="brand" href="../index.html" aria-label="Back to VX Link Helper home">
+      <img src="../icon128.png" alt="" class="brand-icon">
+      <span>VX Link Helper</span>
+    </a>
+    <div class="header-actions">
+      <button id="installBtn" class="ghost-btn" hidden>Install</button>
+      <button id="debugToggle" class="ghost-btn" type="button">Debug</button>
+    </div>
+  </header>
+
+  <main class="app-shell">
+    <section class="hero-card glass-card">
+      <p class="eyebrow">Mobile Web App · iOS / Android</p>
+      <h1>手机端 VX 链接转换器</h1>
+      <p class="subtitle">除应用间 Share Extension 以外的移动端核心功能：粘贴、转换、复制、历史、站点设置、调试状态。全部在浏览器本地运行。</p>
+      <div class="mode-strip" role="group" aria-label="Clipboard mode">
+        <label><input type="radio" name="mode" value="manual"> Manual</label>
+        <label><input type="radio" name="mode" value="recommended" checked> Recommended</label>
+        <label><input type="radio" name="mode" value="fast"> Fast</label>
+      </div>
+    </section>
+
+    <section class="glass-card converter-card" aria-labelledby="convert-title">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">Convert</p>
+          <h2 id="convert-title">粘贴并转换</h2>
+        </div>
+        <span id="capabilityBadge" class="status-pill">checking</span>
+      </div>
+
+      <div id="clipboardHint" class="hint-card">Recommended 模式：点击按钮读取剪贴板并转换。Web 端不能稳定后台读取剪贴板。</div>
+
+      <div class="button-row">
+        <button id="pasteConvertBtn" class="primary-btn" type="button">粘贴并转换</button>
+        <button id="convertInputBtn" class="secondary-btn" type="button">转换输入框</button>
+      </div>
+
+      <label class="input-label" for="sourceInput">手动输入 / Debug 输入</label>
+      <textarea id="sourceInput" rows="5" spellcheck="false" placeholder="https://x.com/user/status/123?s=20&utm_source=share"></textarea>
+
+      <div id="resultCard" class="result-card" hidden>
+        <div class="result-meta">
+          <span id="siteBadge" class="site-badge">Site</span>
+          <span id="cleanedCount">0 params cleaned</span>
+        </div>
+        <div class="url-block bad">
+          <span>Original</span>
+          <code id="originalUrl"></code>
+        </div>
+        <div class="flow-arrow">↓</div>
+        <div class="url-block good">
+          <span>Converted</span>
+          <code id="convertedUrl"></code>
+        </div>
+        <p id="resultNote" class="result-note" hidden></p>
+        <div class="button-row compact">
+          <button id="copyBtn" class="primary-btn" type="button">复制结果</button>
+          <button id="saveBtn" class="secondary-btn" type="button">保存历史</button>
+          <button id="webShareBtn" class="secondary-btn" type="button">系统分享</button>
+          <a id="openBtn" class="secondary-link" href="#" target="_blank" rel="noopener">打开</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="grid-two">
+      <section class="glass-card" aria-labelledby="history-title">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">History</p>
+            <h2 id="history-title">转换历史</h2>
+          </div>
+          <button id="clearHistoryBtn" class="ghost-btn danger" type="button">清空</button>
+        </div>
+        <div id="historyList" class="history-list"></div>
+      </section>
+
+      <section class="glass-card" aria-labelledby="settings-title">
+        <p class="eyebrow">Settings</p>
+        <h2 id="settings-title">站点与隐私设置</h2>
+        <div class="settings-list">
+          <label class="setting-row"><span>保存历史</span><input id="saveHistory" type="checkbox" checked></label>
+          <label class="setting-row"><span>仅保存转换后链接</span><input id="convertedOnly" type="checkbox"></label>
+          <label class="setting-row"><span>X / Twitter</span><input id="siteX" type="checkbox" checked></label>
+          <label class="setting-row"><span>Reddit</span><input id="siteReddit" type="checkbox" checked></label>
+          <label class="setting-row"><span>Bilibili / b23.tv</span><input id="siteBilibili" type="checkbox" checked></label>
+          <label class="setting-row"><span>Pixiv</span><input id="sitePixiv" type="checkbox" checked></label>
+          <label class="setting-row select-row"><span>Reddit 域名</span><select id="redditDomain"><option value="vxreddit.com">vxreddit.com</option><option value="rxddit.com">rxddit.com</option></select></label>
+        </div>
+      </section>
+    </section>
+
+    <section id="debugPanel" class="glass-card debug-panel" hidden>
+      <div class="section-head"><div><p class="eyebrow">Debug</p><h2>手机端调试面板</h2></div><button id="runSelfTestBtn" class="secondary-btn" type="button">Run self-test</button></div>
+      <pre id="debugOutput"></pre>
+    </section>
+  </main>
+
+  <nav class="bottom-tabs" aria-label="Mobile sections">
+    <a href="#convert-title">Convert</a>
+    <a href="#history-title">History</a>
+    <a href="#settings-title">Settings</a>
+    <a href="#debugPanel">Debug</a>
+  </nav>
+
+  <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+  <script src="app.js"></script>
+</body>
+</html>

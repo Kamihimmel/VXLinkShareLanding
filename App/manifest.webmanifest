@@ -1,0 +1,55 @@
+{
+  "name": "VX Link Helper Mobile Web App",
+  "short_name": "VX Link",
+  "description": "Paste, convert, copy, and debug clean VX links on mobile browsers.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#020617",
+  "theme_color": "#070b14",
+  "categories": [
+    "utilities",
+    "productivity"
+  ],
+  "icons": [
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/maskable-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "icons/maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "../bannersmall.png",
+      "sizes": "440x280",
+      "type": "image/png",
+      "form_factor": "narrow"
+    },
+    {
+      "src": "../bannerbig.png",
+      "sizes": "1400x560",
+      "type": "image/png",
+      "form_factor": "wide"
+    }
+  ]
+}
