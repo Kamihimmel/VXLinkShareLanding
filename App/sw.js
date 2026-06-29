@@ -1,7 +1,7 @@
-const CACHE = "vx-link-helper-app-v3-20260629-safearea";
+const CACHE = "vx-link-helper-app-v4-20260629-fixedgap-version";
 const ASSETS = [
-  "./", "./index.html", "./styles.css?v=20260629-safearea", "./app.js?v=20260629-safearea", "./manifest.webmanifest?v=20260629-safearea",
-  "./icons/icon-192.png?v=20260629-safearea", "./icons/icon-512.png", "./icons/maskable-192.png", "./icons/maskable-512.png", "../icon128.png"
+  "./", "./index.html", "./styles.css?v=20260629-fixedgap-version", "./app.js?v=20260629-fixedgap-version", "./manifest.webmanifest?v=20260629-fixedgap-version",
+  "./icons/icon-192.png?v=20260629-fixedgap-version", "./icons/icon-512.png", "./icons/maskable-192.png", "./icons/maskable-512.png", "../icon128.png"
 ];
 self.addEventListener("install", (event) => {
   event.waitUntil(caches.open(CACHE).then((cache) => cache.addAll(ASSETS)).then(() => self.skipWaiting()));
