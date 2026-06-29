@@ -89,10 +89,12 @@
           <label class="setting-row"><span data-i18n="saveHistory">保存历史</span><input id="saveHistory" type="checkbox" checked></label>
           <label class="setting-row"><span data-i18n="convertedOnly">仅保存转换后链接</span><input id="convertedOnly" type="checkbox"></label>
           <label class="setting-row"><span>X / Twitter</span><input id="siteX" type="checkbox" checked></label>
-          <label class="setting-row"><span>Reddit</span><input id="siteReddit" type="checkbox" checked></label>
+          <div class="setting-row site-setting">
+            <div class="setting-main"><span>Reddit</span><input id="siteReddit" type="checkbox" checked></div>
+            <label class="nested-select"><span data-i18n="redditDomain">Reddit 域名</span><select id="redditDomain"><option value="vxreddit.com">vxreddit.com</option><option value="rxddit.com">rxddit.com</option></select></label>
+          </div>
           <label class="setting-row"><span>Bilibili / b23.tv</span><input id="siteBilibili" type="checkbox" checked></label>
           <label class="setting-row"><span>Pixiv</span><input id="sitePixiv" type="checkbox" checked></label>
-          <label class="setting-row select-row"><span data-i18n="redditDomain">Reddit 域名</span><select id="redditDomain"><option value="vxreddit.com">vxreddit.com</option><option value="rxddit.com">rxddit.com</option></select></label>
           <a class="secondary-link full-link" href="../index.html" target="_blank" rel="noopener" data-i18n="openHome">打开项目主页</a>
         </div>
       </section>
