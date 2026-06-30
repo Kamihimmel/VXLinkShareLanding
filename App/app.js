@@ -4,8 +4,8 @@
   const STORE_KEY = "vx-mobile-web-settings-v2";
   const HISTORY_KEY = "vx-mobile-web-history-v1";
   const LANG_KEY = "vxlh-lang";
-  const APP_VERSION = "20260630-liquid-tabs-polish-version";
-  const SW_CACHE = "vx-link-helper-app-v10-20260630-liquid-tabs-polish-version";
+  const APP_VERSION = "20260630-rich-clipboard-read";
+  const SW_CACHE = "vx-link-helper-app-v10-20260630-rich-clipboard-read";
   const SUPPORTED_LANGS = new Set(["en", "zh", "zh-TW", "es", "ar", "pt", "fr", "ja"]);
   const I18N = {
     en: { languageLabel: "Language", heroTitle: "Mobile VX Link Converter", heroSubtitle: "Paste, convert, copy, history, settings, and debugging run locally in your browser.", convertTitle: "Clipboard Convert", clipboardHint: "Tap the button to read clipboard and convert. Web apps cannot reliably read clipboard in the background.", pasteConvert: "Read Clipboard & Convert", convertInput: "Convert Input", manualInput: "Manual input", original: "Original", converted: "Converted", copyResult: "Copy", saveResult: "Save", shareResult: "Share", openResult: "Open", historyTitle: "History", clearHistory: "Clear", settingsTitle: "Settings", modeTitle: "Clipboard mode", modeManual: "Manual", modeRecommended: "Recommended", modeFast: "Fast", saveHistory: "Save history", convertedOnly: "Save converted links only", redditDomain: "Reddit domain", openHome: "Open project homepage", debugTitle: "Debug panel", tabConvert: "Convert", tabHistory: "History", tabSettings: "Settings", tabDebug: "Debug", emptyHistory: "No history yet.", copied: "Copied", saved: "Saved", unsupportedShare: "Web Share API is not available here", cleaned: "params cleaned", b23Note: "b23.tv mobile short link converted to vxb23.tv; surrounding share text is preserved." },
@@ -23,8 +23,13 @@
   const $ = (id) => document.getElementById(id);
   const safeJson = (raw, fallback) => { try { return raw ? JSON.parse(raw) : fallback; } catch { return fallback; } };
   const normalizeLanguage = (lang) => { const l = String(lang || "").toLowerCase(); if (l.includes("hant") || l === "zh-tw" || l === "zh-hk" || l === "zh-mo") return "zh-TW"; const p = l.split("-")[0]; return SUPPORTED_LANGS.has(p) ? p : "en"; };
-  const state = { settings: loadSettings(), result: null, lang: SUPPORTED_LANGS.has(localStorage.getItem(LANG_KEY)) ? localStorage.getItem(LANG_KEY) : normalizeLanguage(navigator.language), currentTab: "convert" };
-  const t = (key) => (I18N[state.lang] || I18N.en)[key] || I18N.en[key] || key;
+  const state = { settings: loadSettings(), result: null, lang: SUPPORTED_LANGS.has(localStorage.getItem(LANG_KEY)) ? localStorage.getItem(LANG_KEY) : normalizeLanguage(navigator.language), currentTab: "convert", lastClipboard: null };
+  const EXTRA_I18N = {
+    en: { clipboardEmpty: "Clipboard text is empty. If you copied a link from another app, paste it into the manual input box and convert.", clipboardImageOnly: "Clipboard contains image data, not link text. Copy a link or paste text manually.", clipboardNoReadableText: "Clipboard has no readable text URL. Paste the link into the manual input box and convert.", clipboardUnavailable: "Clipboard reading is not available in this browser/context. Paste manually instead." },
+    zh: { clipboardEmpty: "剪贴板文本为空。如果你是从其他 App 复制链接，请粘贴到手动输入框后转换。", clipboardImageOnly: "剪贴板里是图片数据，不是链接文本。请复制链接或手动粘贴文字。", clipboardNoReadableText: "剪贴板里没有可读取的文本链接。请粘贴到手动输入框后转换。", clipboardUnavailable: "当前浏览器/环境不可读取剪贴板，请改用手动粘贴。" },
+    "zh-TW": { clipboardEmpty: "剪貼簿文字為空。如果你是從其他 App 複製連結，請貼到手動輸入框後轉換。", clipboardImageOnly: "剪貼簿裡是圖片資料，不是連結文字。請複製連結或手動貼上文字。", clipboardNoReadableText: "剪貼簿裡沒有可讀取的文字連結。請貼到手動輸入框後轉換。", clipboardUnavailable: "目前瀏覽器/環境無法讀取剪貼簿，請改用手動貼上。" }
+  };
+  const t = (key) => (EXTRA_I18N[state.lang] || EXTRA_I18N.en || {})[key] || (I18N[state.lang] || I18N.en)[key] || I18N.en[key] || key;
 
   function extractFirstUrl(input) {
     const match = String(input).match(/https?:\/\/[^\s<>()\[\]{}"'，。！？；：、]+/i);
@@ -55,18 +60,69 @@
     return { ok: true, changed: output !== raw, input: raw, extracted, output, convertedUrl, siteKey, siteLabel, cleaned: [...cleaned].sort(), note };
   }
 
-  async function readClipboard() { if (!navigator.clipboard?.readText) throw new Error("Clipboard readText is not available in this browser/context."); return navigator.clipboard.readText(); }
+  function normalizeClipboardPayload(type, payload) {
+    const text = String(payload || "").trim();
+    if (!text) return "";
+    if (type === "text/uri-list") return text.split(/\r?\n/).map((line) => line.trim()).find((line) => line && !line.startsWith("#")) || "";
+    if (type === "text/html") {
+      try {
+        const doc = new DOMParser().parseFromString(text, "text/html");
+        const href = [...doc.querySelectorAll("a[href]")].map((a) => a.href).find(Boolean);
+        if (href) return href;
+        const bodyText = doc.body?.textContent?.trim();
+        if (bodyText) return bodyText;
+      } catch {}
+      return text.replace(/&amp;/g, "&");
+    }
+    return text;
+  }
+  async function readClipboard() {
+    const detail = { method: "none", types: [], empty: false, error: "" };
+    const preferredTypes = ["text/plain", "text/uri-list", "text/html"];
+    if (navigator.clipboard?.read) {
+      try {
+        const items = await navigator.clipboard.read();
+        detail.method = "read";
+        detail.types = [...new Set(items.flatMap((item) => item.types || []))].sort();
+        state.lastClipboard = detail;
+        updateDebug();
+        for (const type of preferredTypes) {
+          for (const item of items) {
+            if (!item.types?.includes(type)) continue;
+            const payload = normalizeClipboardPayload(type, await (await item.getType(type)).text());
+            if (payload) return payload;
+          }
+        }
+        detail.empty = true;
+        state.lastClipboard = detail;
+        updateDebug();
+        if (detail.types.some((type) => type.startsWith("image/"))) throw new Error(t("clipboardImageOnly"));
+        throw new Error(t("clipboardNoReadableText"));
+      } catch (err) {
+        detail.error = err.message;
+        state.lastClipboard = detail;
+        updateDebug();
+        if (!navigator.clipboard?.readText || detail.types.length) throw err;
+      }
+    }
+    if (!navigator.clipboard?.readText) throw new Error(t("clipboardUnavailable"));
+    const text = await navigator.clipboard.readText();
+    state.lastClipboard = { method: "readText", types: ["text/plain"], empty: !String(text || "").trim(), error: "" };
+    updateDebug();
+    if (!String(text || "").trim()) throw new Error(t("clipboardEmpty"));
+    return text;
+  }
   async function writeClipboard(text) { if (!navigator.clipboard?.writeText) throw new Error("Clipboard writeText is not available in this browser/context."); return navigator.clipboard.writeText(text); }
   function toast(message) { const el = $("toast"); el.textContent = message; el.hidden = false; clearTimeout(toast.timer); toast.timer = setTimeout(() => { el.hidden = true; }, 3200); }
   function renderResult(result) { state.result = result; if (!result.ok) { toast(result.error); return; } $("resultCard").hidden = false; $("siteBadge").textContent = result.siteLabel; $("cleanedCount").textContent = `${result.cleaned.length} ${t("cleaned")}`; $("originalUrl").textContent = result.input; $("convertedUrl").textContent = result.output; $("openBtn").href = result.convertedUrl || result.output; $("resultNote").hidden = !result.note; $("resultNote").textContent = result.note; }
   async function convertAndCopy(text, autoSave = true) { const result = convert(text); renderResult(result); if (!result.ok) return; if (result.changed) { try { await writeClipboard(result.output); toast(t("copied")); } catch (err) { toast(`Converted, copy failed: ${err.message}`); } if (autoSave && state.settings.saveHistory) saveHistory(result); } }
   function saveHistory(result) { if (!result?.ok) return; const item = { id: crypto.randomUUID?.() || `${Date.now()}-${Math.random()}`, createdAt: new Date().toISOString(), siteLabel: result.siteLabel, original: state.settings.convertedOnly ? "" : result.input, output: result.output, cleaned: result.cleaned }; setHistory([item, ...history()]); renderHistory(); }
   function renderHistory() { const list = $("historyList"); const items = history(); if (!items.length) { list.innerHTML = `<div class="history-empty">${escapeHtml(t("emptyHistory"))}</div>`; return; } list.innerHTML = items.map((item) => `<article class="history-item"><header><strong>${escapeHtml(item.siteLabel)}</strong><time>${new Date(item.createdAt).toLocaleString()}</time></header>${item.original ? `<p class="muted">${escapeHtml(item.original)}</p>` : ""}<code>${escapeHtml(item.output)}</code><div class="button-row compact"><button class="secondary-btn" data-copy="${escapeHtml(item.output)}">${escapeHtml(t("copyResult"))}</button><button class="secondary-btn" data-del="${item.id}">Delete</button></div></article>`).join(""); }
-  function updateDebug() { const version = `Version: ${APP_VERSION}`; if ($("appVersionBadge")) $("appVersionBadge").textContent = version; $("debugOutput").textContent = JSON.stringify({ appVersion: APP_VERSION, serviceWorkerCache: SW_CACHE, userAgent: navigator.userAgent, lang: state.lang, standalone: window.matchMedia("(display-mode: standalone)").matches || navigator.standalone === true, clipboardRead: Boolean(navigator.clipboard?.readText), clipboardWrite: Boolean(navigator.clipboard?.writeText), webShare: Boolean(navigator.share), serviceWorker: "serviceWorker" in navigator, tab: state.currentTab, settings: state.settings, historyCount: history().length }, null, 2); }
+  function updateDebug() { const version = `Version: ${APP_VERSION}`; if ($("appVersionBadge")) $("appVersionBadge").textContent = version; $("debugOutput").textContent = JSON.stringify({ appVersion: APP_VERSION, serviceWorkerCache: SW_CACHE, userAgent: navigator.userAgent, lang: state.lang, standalone: window.matchMedia("(display-mode: standalone)").matches || navigator.standalone === true, clipboardRead: Boolean(navigator.clipboard?.read), clipboardReadText: Boolean(navigator.clipboard?.readText), clipboardWrite: Boolean(navigator.clipboard?.writeText), lastClipboard: state.lastClipboard, webShare: Boolean(navigator.share), serviceWorker: "serviceWorker" in navigator, tab: state.currentTab, settings: state.settings, historyCount: history().length }, null, 2); }
   function selfTest() { const cases = [["https://x.com/user/status/1?s=20&t=abc", "https://vxtwitter.com/user/status/1"], ["https://reddit.com/r/a/comments/b/c/?utm_source=share", `https://${state.settings.redditDomain}/r/a/comments/b/c`], ["https://www.bilibili.com/video/BV1/?spm_id_from=1&p=2&vd_source=x", "https://vxbilibili.com/video/BV1/?p=2"], ["https://b23.tv/AbCd?share_source=copy_link", "https://vxb23.tv/AbCd"], ["【【熟肉】谁想要这种东西：特朗普手机骗局拆解 - MonkeyExplains】 https://b23.tv/06psX72", "【【熟肉】谁想要这种东西：特朗普手机骗局拆解 - MonkeyExplains】 https://vxb23.tv/06psX72"], ["https://www.pixiv.net/artworks/123?utm_source=x", "https://phixiv.net/artworks/123"]]; return cases.map(([input, expected]) => ({ input, expected, actual: convert(input).output, pass: convert(input).output === expected })); }
   function applyI18n() { document.documentElement.lang = state.lang === "zh-TW" ? "zh-Hant" : state.lang; document.documentElement.dir = state.lang === "ar" ? "rtl" : "ltr"; document.querySelectorAll("[data-i18n]").forEach((el) => { el.textContent = t(el.dataset.i18n); }); $("langSelect").value = state.lang; renderHistory(); if (state.result) renderResult(state.result); updateDebug(); }
   function switchTab(tab) { state.currentTab = tab; document.querySelectorAll(".tab-page").forEach((page) => page.classList.toggle("active", page.dataset.page === tab)); document.querySelectorAll(".bottom-tabs [data-tab]").forEach((button) => button.classList.toggle("active", button.dataset.tab === tab)); if (tab === "debug") updateDebug(); window.scrollTo({ top: 0, behavior: "instant" }); }
   function bindSettings() { document.querySelector(`input[name="mode"][value="${state.settings.mode}"]`).checked = true; ["saveHistory", "convertedOnly", "siteX", "siteReddit", "siteBilibili", "sitePixiv"].forEach((id) => { $(id).checked = state.settings[id]; $(id).addEventListener("change", () => { state.settings[id] = $(id).checked; saveSettings(); updateDebug(); }); }); $("redditDomain").value = state.settings.redditDomain; $("redditDomain").addEventListener("change", () => { state.settings.redditDomain = $("redditDomain").value; saveSettings(); updateDebug(); }); document.querySelectorAll('input[name="mode"]').forEach((input) => input.addEventListener("change", () => { state.settings.mode = input.value; saveSettings(); updateDebug(); })); }
-  function boot() { bindSettings(); applyI18n(); $("capabilityBadge").textContent = navigator.clipboard ? "clipboard API" : "manual only"; $("pasteConvertBtn").addEventListener("click", async () => { try { await convertAndCopy(await readClipboard()); } catch (err) { toast(err.message); } }); $("convertInputBtn").addEventListener("click", () => convertAndCopy($("sourceInput").value)); $("copyBtn").addEventListener("click", async () => { if (state.result?.ok) { await writeClipboard(state.result.output); toast(t("copied")); } }); $("saveBtn").addEventListener("click", () => { if (state.result?.ok) { saveHistory(state.result); toast(t("saved")); } }); $("webShareBtn").addEventListener("click", async () => { if (!state.result?.ok) return; if (navigator.share) await navigator.share({ title: "VX Link", text: state.result.output, url: state.result.output }); else toast(t("unsupportedShare")); }); $("clearHistoryBtn").addEventListener("click", () => { setHistory([]); renderHistory(); updateDebug(); }); $("historyList").addEventListener("click", async (event) => { const copy = event.target.closest("[data-copy]"); const del = event.target.closest("[data-del]"); if (copy) { await writeClipboard(copy.dataset.copy); toast(t("copied")); } if (del) { setHistory(history().filter((item) => item.id !== del.dataset.del)); renderHistory(); updateDebug(); } }); $("runSelfTestBtn").addEventListener("click", () => { $("debugOutput").textContent = JSON.stringify({ selfTest: selfTest(), debug: safeJson($("debugOutput").textContent, {}) }, null, 2); }); $("langSelect").addEventListener("change", (event) => { state.lang = SUPPORTED_LANGS.has(event.target.value) ? event.target.value : "en"; localStorage.setItem(LANG_KEY, state.lang); applyI18n(); }); document.querySelectorAll(".bottom-tabs [data-tab]").forEach((button) => button.addEventListener("click", () => switchTab(button.dataset.tab))); if ("serviceWorker" in navigator) { navigator.serviceWorker.register("sw.js?v=20260630-liquid-tabs-polish-version").then((registration) => registration.update()).catch(() => {}); } window.addEventListener("focus", async () => { if (state.settings.mode === "fast") { try { await convertAndCopy(await readClipboard()); } catch { /* browsers may reject without user gesture */ } } }); }
+  function boot() { bindSettings(); applyI18n(); $("capabilityBadge").textContent = navigator.clipboard ? "clipboard API" : "manual only"; $("pasteConvertBtn").addEventListener("click", async () => { try { await convertAndCopy(await readClipboard()); } catch (err) { toast(err.message); } }); $("convertInputBtn").addEventListener("click", () => convertAndCopy($("sourceInput").value)); $("copyBtn").addEventListener("click", async () => { if (state.result?.ok) { await writeClipboard(state.result.output); toast(t("copied")); } }); $("saveBtn").addEventListener("click", () => { if (state.result?.ok) { saveHistory(state.result); toast(t("saved")); } }); $("webShareBtn").addEventListener("click", async () => { if (!state.result?.ok) return; if (navigator.share) await navigator.share({ title: "VX Link", text: state.result.output, url: state.result.output }); else toast(t("unsupportedShare")); }); $("clearHistoryBtn").addEventListener("click", () => { setHistory([]); renderHistory(); updateDebug(); }); $("historyList").addEventListener("click", async (event) => { const copy = event.target.closest("[data-copy]"); const del = event.target.closest("[data-del]"); if (copy) { await writeClipboard(copy.dataset.copy); toast(t("copied")); } if (del) { setHistory(history().filter((item) => item.id !== del.dataset.del)); renderHistory(); updateDebug(); } }); $("runSelfTestBtn").addEventListener("click", () => { $("debugOutput").textContent = JSON.stringify({ selfTest: selfTest(), debug: safeJson($("debugOutput").textContent, {}) }, null, 2); }); $("langSelect").addEventListener("change", (event) => { state.lang = SUPPORTED_LANGS.has(event.target.value) ? event.target.value : "en"; localStorage.setItem(LANG_KEY, state.lang); applyI18n(); }); document.querySelectorAll(".bottom-tabs [data-tab]").forEach((button) => button.addEventListener("click", () => switchTab(button.dataset.tab))); if ("serviceWorker" in navigator) { navigator.serviceWorker.register("sw.js?v=20260630-rich-clipboard-read").then((registration) => registration.update()).catch(() => {}); } window.addEventListener("focus", async () => { if (state.settings.mode === "fast") { try { await convertAndCopy(await readClipboard()); } catch { /* browsers may reject without user gesture */ } } }); }
   document.addEventListener("DOMContentLoaded", boot);
 })();
