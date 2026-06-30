@@ -1,7 +1,7 @@
-const CACHE = "vx-link-helper-app-v8-20260630-dvh-shell-version";
+const CACHE = "vx-link-helper-app-v9-20260630-flow-liquid-tabs-version";
 const ASSETS = [
-  "./", "./index.html", "./styles.css?v=20260630-dvh-shell-version", "./app.js?v=20260630-dvh-shell-version", "./manifest.webmanifest?v=20260630-dvh-shell-version",
-  "./icons/icon-192.png?v=20260630-dvh-shell-version", "./icons/icon-512.png", "./icons/maskable-192.png", "./icons/maskable-512.png", "../icon128.png"
+  "./", "./index.html", "./styles.css?v=20260630-flow-liquid-tabs-version", "./app.js?v=20260630-flow-liquid-tabs-version", "./manifest.webmanifest?v=20260630-flow-liquid-tabs-version",
+  "./icons/icon-192.png?v=20260630-flow-liquid-tabs-version", "./icons/icon-512.png", "./icons/maskable-192.png", "./icons/maskable-512.png", "../icon128.png"
 ];
 self.addEventListener("install", (event) => {
   event.waitUntil(caches.open(CACHE).then((cache) => cache.addAll(ASSETS)).then(() => self.skipWaiting()));
