@@ -1,7 +1,7 @@
-const CACHE = "vx-link-helper-app-v10-20260630-rich-clipboard-read";
+const CACHE = "vx-link-helper-app-v10-20260630-pixiv-copy-toast";
 const ASSETS = [
-  "./", "./index.html", "./styles.css?v=20260630-rich-clipboard-read", "./app.js?v=20260630-rich-clipboard-read", "./manifest.webmanifest?v=20260630-rich-clipboard-read",
-  "./icons/icon-192.png?v=20260630-rich-clipboard-read", "./icons/icon-512.png", "./icons/maskable-192.png", "./icons/maskable-512.png", "../icon128.png"
+  "./", "./index.html", "./styles.css?v=20260630-pixiv-copy-toast", "./app.js?v=20260630-pixiv-copy-toast", "./manifest.webmanifest?v=20260630-pixiv-copy-toast",
+  "./icons/icon-192.png?v=20260630-pixiv-copy-toast", "./icons/icon-512.png", "./icons/maskable-192.png", "./icons/maskable-512.png", "../icon128.png"
 ];
 self.addEventListener("install", (event) => {
   event.waitUntil(caches.open(CACHE).then((cache) => cache.addAll(ASSETS)).then(() => self.skipWaiting()));
