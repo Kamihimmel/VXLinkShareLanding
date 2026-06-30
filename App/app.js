@@ -4,8 +4,8 @@
   const STORE_KEY = "vx-mobile-web-settings-v2";
   const HISTORY_KEY = "vx-mobile-web-history-v1";
   const LANG_KEY = "vxlh-lang";
-  const APP_VERSION = "20260630-pixiv-copy-toast";
-  const SW_CACHE = "vx-link-helper-app-v10-20260630-pixiv-copy-toast";
+  const APP_VERSION = "20260630-readtext-first-fallback";
+  const SW_CACHE = "vx-link-helper-app-v10-20260630-readtext-first-fallback";
   const SUPPORTED_LANGS = new Set(["en", "zh", "zh-TW", "es", "ar", "pt", "fr", "ja"]);
   const I18N = {
     en: { languageLabel: "Language", heroTitle: "Mobile VX Link Converter", heroSubtitle: "Paste, convert, copy, history, settings, and debugging run locally in your browser.", convertTitle: "Clipboard Convert", clipboardHint: "Tap the button to read clipboard and convert. Web apps cannot reliably read clipboard in the background.", pasteConvert: "Read Clipboard & Convert", convertInput: "Convert Input", manualInput: "Manual input", original: "Original", converted: "Converted", copyResult: "Copy", saveResult: "Save", shareResult: "Share", openResult: "Open", historyTitle: "History", clearHistory: "Clear", settingsTitle: "Settings", modeTitle: "Clipboard mode", modeManual: "Manual", modeRecommended: "Recommended", modeFast: "Fast", saveHistory: "Save history", convertedOnly: "Save converted links only", redditDomain: "Reddit domain", openHome: "Open project homepage", debugTitle: "Debug panel", tabConvert: "Convert", tabHistory: "History", tabSettings: "Settings", tabDebug: "Debug", emptyHistory: "No history yet.", copied: "Copied", saved: "Saved", unsupportedShare: "Web Share API is not available here", cleaned: "params cleaned", b23Note: "b23.tv mobile short link converted to vxb23.tv; surrounding share text is preserved." },
@@ -77,12 +77,25 @@
     return text;
   }
   async function readClipboard() {
-    const detail = { method: "none", types: [], empty: false, error: "" };
     const preferredTypes = ["text/plain", "text/uri-list", "text/html"];
+    let readTextDetail = null;
+    if (navigator.clipboard?.readText) {
+      try {
+        const text = await navigator.clipboard.readText();
+        readTextDetail = { method: "readText", types: ["text/plain"], empty: !String(text || "").trim(), error: "" };
+        state.lastClipboard = readTextDetail;
+        updateDebug();
+        if (String(text || "").trim()) return text;
+      } catch (err) {
+        readTextDetail = { method: "readText", types: ["text/plain"], empty: false, error: err.message };
+        state.lastClipboard = readTextDetail;
+        updateDebug();
+      }
+    }
     if (navigator.clipboard?.read) {
+      const detail = { method: "read", fallbackFrom: readTextDetail, types: [], empty: false, error: "" };
       try {
         const items = await navigator.clipboard.read();
-        detail.method = "read";
         detail.types = [...new Set(items.flatMap((item) => item.types || []))].sort();
         state.lastClipboard = detail;
         updateDebug();
@@ -102,15 +115,12 @@
         detail.error = err.message;
         state.lastClipboard = detail;
         updateDebug();
-        if (!navigator.clipboard?.readText || detail.types.length) throw err;
+        throw err;
       }
     }
-    if (!navigator.clipboard?.readText) throw new Error(t("clipboardUnavailable"));
-    const text = await navigator.clipboard.readText();
-    state.lastClipboard = { method: "readText", types: ["text/plain"], empty: !String(text || "").trim(), error: "" };
-    updateDebug();
-    if (!String(text || "").trim()) throw new Error(t("clipboardEmpty"));
-    return text;
+    if (readTextDetail?.empty) throw new Error(t("clipboardEmpty"));
+    if (readTextDetail?.error) throw new Error(readTextDetail.error);
+    throw new Error(t("clipboardUnavailable"));
   }
   async function writeClipboard(text) { if (!navigator.clipboard?.writeText) throw new Error("Clipboard writeText is not available in this browser/context."); return navigator.clipboard.writeText(text); }
   function toast(message, tone = "info") { const el = $("toast"); el.textContent = message; el.className = `toast ${tone === "warning" ? "warning" : ""}`.trim(); el.hidden = false; clearTimeout(toast.timer); toast.timer = setTimeout(() => { el.hidden = true; }, 7000); }
@@ -123,6 +133,6 @@
   function applyI18n() { document.documentElement.lang = state.lang === "zh-TW" ? "zh-Hant" : state.lang; document.documentElement.dir = state.lang === "ar" ? "rtl" : "ltr"; document.querySelectorAll("[data-i18n]").forEach((el) => { el.textContent = t(el.dataset.i18n); }); $("langSelect").value = state.lang; renderHistory(); if (state.result) renderResult(state.result); updateDebug(); }
   function switchTab(tab) { state.currentTab = tab; document.querySelectorAll(".tab-page").forEach((page) => page.classList.toggle("active", page.dataset.page === tab)); document.querySelectorAll(".bottom-tabs [data-tab]").forEach((button) => button.classList.toggle("active", button.dataset.tab === tab)); if (tab === "debug") updateDebug(); window.scrollTo({ top: 0, behavior: "instant" }); }
   function bindSettings() { document.querySelector(`input[name="mode"][value="${state.settings.mode}"]`).checked = true; ["saveHistory", "convertedOnly", "siteX", "siteReddit", "siteBilibili", "sitePixiv"].forEach((id) => { $(id).checked = state.settings[id]; $(id).addEventListener("change", () => { state.settings[id] = $(id).checked; saveSettings(); updateDebug(); }); }); $("redditDomain").value = state.settings.redditDomain; $("redditDomain").addEventListener("change", () => { state.settings.redditDomain = $("redditDomain").value; saveSettings(); updateDebug(); }); document.querySelectorAll('input[name="mode"]').forEach((input) => input.addEventListener("change", () => { state.settings.mode = input.value; saveSettings(); updateDebug(); })); }
-  function boot() { bindSettings(); applyI18n(); $("capabilityBadge").textContent = navigator.clipboard ? "clipboard API" : "manual only"; $("pasteConvertBtn").addEventListener("click", async () => { try { await convertAndCopy(await readClipboard()); } catch (err) { toast(err.message); } }); $("convertInputBtn").addEventListener("click", () => convertAndCopy($("sourceInput").value)); $("copyBtn").addEventListener("click", async () => { if (state.result?.ok) { await writeClipboard(state.result.output); toast(t("copied")); } }); $("saveBtn").addEventListener("click", () => { if (state.result?.ok) { saveHistory(state.result); toast(t("saved")); } }); $("webShareBtn").addEventListener("click", async () => { if (!state.result?.ok) return; if (navigator.share) await navigator.share({ title: "VX Link", text: state.result.output, url: state.result.output }); else toast(t("unsupportedShare")); }); $("clearHistoryBtn").addEventListener("click", () => { setHistory([]); renderHistory(); updateDebug(); }); $("historyList").addEventListener("click", async (event) => { const copy = event.target.closest("[data-copy]"); const del = event.target.closest("[data-del]"); if (copy) { await writeClipboard(copy.dataset.copy); toast(t("copied")); } if (del) { setHistory(history().filter((item) => item.id !== del.dataset.del)); renderHistory(); updateDebug(); } }); $("runSelfTestBtn").addEventListener("click", () => { $("debugOutput").textContent = JSON.stringify({ selfTest: selfTest(), debug: safeJson($("debugOutput").textContent, {}) }, null, 2); }); $("langSelect").addEventListener("change", (event) => { state.lang = SUPPORTED_LANGS.has(event.target.value) ? event.target.value : "en"; localStorage.setItem(LANG_KEY, state.lang); applyI18n(); }); document.querySelectorAll(".bottom-tabs [data-tab]").forEach((button) => button.addEventListener("click", () => switchTab(button.dataset.tab))); if ("serviceWorker" in navigator) { navigator.serviceWorker.register("sw.js?v=20260630-pixiv-copy-toast").then((registration) => registration.update()).catch(() => {}); } window.addEventListener("focus", async () => { if (state.settings.mode === "fast") { try { await convertAndCopy(await readClipboard()); } catch { /* browsers may reject without user gesture */ } } }); }
+  function boot() { bindSettings(); applyI18n(); $("capabilityBadge").textContent = navigator.clipboard ? "clipboard API" : "manual only"; $("pasteConvertBtn").addEventListener("click", async () => { try { await convertAndCopy(await readClipboard()); } catch (err) { toast(err.message); } }); $("convertInputBtn").addEventListener("click", () => convertAndCopy($("sourceInput").value)); $("copyBtn").addEventListener("click", async () => { if (state.result?.ok) { await writeClipboard(state.result.output); toast(t("copied")); } }); $("saveBtn").addEventListener("click", () => { if (state.result?.ok) { saveHistory(state.result); toast(t("saved")); } }); $("webShareBtn").addEventListener("click", async () => { if (!state.result?.ok) return; if (navigator.share) await navigator.share({ title: "VX Link", text: state.result.output, url: state.result.output }); else toast(t("unsupportedShare")); }); $("clearHistoryBtn").addEventListener("click", () => { setHistory([]); renderHistory(); updateDebug(); }); $("historyList").addEventListener("click", async (event) => { const copy = event.target.closest("[data-copy]"); const del = event.target.closest("[data-del]"); if (copy) { await writeClipboard(copy.dataset.copy); toast(t("copied")); } if (del) { setHistory(history().filter((item) => item.id !== del.dataset.del)); renderHistory(); updateDebug(); } }); $("runSelfTestBtn").addEventListener("click", () => { $("debugOutput").textContent = JSON.stringify({ selfTest: selfTest(), debug: safeJson($("debugOutput").textContent, {}) }, null, 2); }); $("langSelect").addEventListener("change", (event) => { state.lang = SUPPORTED_LANGS.has(event.target.value) ? event.target.value : "en"; localStorage.setItem(LANG_KEY, state.lang); applyI18n(); }); document.querySelectorAll(".bottom-tabs [data-tab]").forEach((button) => button.addEventListener("click", () => switchTab(button.dataset.tab))); if ("serviceWorker" in navigator) { navigator.serviceWorker.register("sw.js?v=20260630-readtext-first-fallback").then((registration) => registration.update()).catch(() => {}); } window.addEventListener("focus", async () => { if (state.settings.mode === "fast") { try { await convertAndCopy(await readClipboard()); } catch { /* browsers may reject without user gesture */ } } }); }
   document.addEventListener("DOMContentLoaded", boot);
 })();
