@@ -308,8 +308,8 @@ tr:last-child td { border-bottom: 0; }
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 84px;
-    height: 58px;
+    width: 254px;
+    height: 48px;
     margin: 0 auto;
     border: 1px solid rgba(88, 101, 242, .74);
     border-radius: 18px;
