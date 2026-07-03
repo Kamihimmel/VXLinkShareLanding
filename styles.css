@@ -198,6 +198,17 @@ nav a:hover { color: var(--text-main); text-shadow: 0 0 18px rgba(56, 189, 248, 
     box-shadow: 0 12px 28px rgba(0,0,0,.18), inset 0 1px 0 rgba(255,255,255,.04);
 }
 .btn-store:hover { border-color: rgba(56, 189, 248, .76); transform: translateY(-3px); box-shadow: 0 18px 34px rgba(0,0,0,0.32), 0 0 28px rgba(56,189,248,.10); }
+.btn-store.inactive {
+    opacity: 0.58;
+    cursor: not-allowed;
+    filter: grayscale(0.25);
+}
+.btn-store.inactive:hover {
+    border-color: var(--border-color);
+    transform: none;
+    box-shadow: 0 12px 28px rgba(0,0,0,.18), inset 0 1px 0 rgba(255,255,255,.04);
+}
+.btn-store.inactive .btn-text small { color: rgba(248, 250, 252, 0.68); }
 .btn-icon { font-size: 1.8rem; line-height: 1; }
 .btn-text { display: flex; flex-direction: column; min-width: 0; }
 .btn-text small { font-size: 0.72rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 2px; }
