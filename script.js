@@ -12,6 +12,8 @@ const i18nData = {
         "btn-chrome": "Chrome Web Store",
         "btn-firefox": "Firefox Add-ons",
         "btn-safari": "Mac App Store",
+        "btn-webapp": "Open Web App",
+        "store-webapp-small": "Mobile Web",
         "store-edge-small": "Available on",
         "store-android-small": "Coming soon",
         "store-ios-small": "Coming soon",
@@ -65,6 +67,8 @@ const i18nData = {
         "btn-chrome": "Chrome 应用商店",
         "btn-firefox": "Firefox 附加组件",
         "btn-safari": "Mac App Store",
+        "btn-webapp": "打开 Web App",
+        "store-webapp-small": "网页版",
         "store-edge-small": "前往商店",
         "store-android-small": "敬请期待",
         "store-ios-small": "敬请期待",
@@ -118,6 +122,8 @@ const i18nData = {
         "btn-chrome": "Chrome 線上應用程式商店",
         "btn-firefox": "Firefox 附加元件",
         "btn-safari": "Mac App Store",
+        "btn-webapp": "開啟 Web App",
+        "store-webapp-small": "網頁版",
         "store-edge-small": "前往商店",
         "store-android-small": "敬請期待",
         "store-ios-small": "敬請期待",
@@ -171,6 +177,8 @@ const i18nData = {
         "btn-chrome": "Chrome Web Store",
         "btn-firefox": "Firefox Add-ons",
         "btn-safari": "Mac App Store",
+        "btn-webapp": "Abrir Web App",
+        "store-webapp-small": "Web móvil",
         "store-edge-small": "Disponible en",
         "store-android-small": "Próximamente",
         "store-ios-small": "Próximamente",
@@ -224,6 +232,8 @@ const i18nData = {
         "btn-chrome": "Chrome Web Store",
         "btn-firefox": "Firefox Add-ons",
         "btn-safari": "Mac App Store",
+        "btn-webapp": "فتح تطبيق الويب",
+        "store-webapp-small": "ويب الجوال",
         "store-edge-small": "متوفر على",
         "store-android-small": "قريباً",
         "store-ios-small": "قريباً",
@@ -277,6 +287,8 @@ const i18nData = {
         "btn-chrome": "Chrome Web Store",
         "btn-firefox": "Firefox Add-ons",
         "btn-safari": "Mac App Store",
+        "btn-webapp": "Abrir Web App",
+        "store-webapp-small": "Web móvel",
         "store-edge-small": "Disponível na",
         "store-android-small": "Em breve",
         "store-ios-small": "Em breve",
@@ -330,6 +342,8 @@ const i18nData = {
         "btn-chrome": "Chrome Web Store",
         "btn-firefox": "Firefox Add-ons",
         "btn-safari": "Mac App Store",
+        "btn-webapp": "Ouvrir la Web App",
+        "store-webapp-small": "Web mobile",
         "store-edge-small": "Disponible sur",
         "store-android-small": "Bientôt disponible",
         "store-ios-small": "Bientôt disponible",
@@ -383,6 +397,8 @@ const i18nData = {
         "btn-chrome": "Chrome Web Store",
         "btn-firefox": "Firefox Add-ons",
         "btn-safari": "Mac App Store",
+        "btn-webapp": "Web App を開く",
+        "store-webapp-small": "モバイル Web",
         "store-edge-small": "ストアで入手",
         "store-android-small": "近日公開",
         "store-ios-small": "近日公開",
@@ -476,7 +492,7 @@ function applyTranslations() {
         if (data[key]) el.textContent = data[key];
     });
 
-    ["btn-chrome", "btn-firefox", "btn-edge", "btn-safari", "btn-android", "btn-ios", "back-home", "p-title", "p-h1", "p-h2", "p-d2", "p-h3", "p-d3", "p-l1", "p-l2", "p-l3", "p-h4", "p-d4"].forEach(id => setText(id, data[id]));
+    ["btn-chrome", "btn-firefox", "btn-edge", "btn-safari", "btn-webapp", "btn-android", "btn-ios", "back-home", "p-title", "p-h1", "p-h2", "p-d2", "p-h3", "p-d3", "p-l1", "p-l2", "p-l3", "p-h4", "p-d4"].forEach(id => setText(id, data[id]));
     ["p-intro", "p-d1"].forEach(id => setHtml(id, data[id]));
     setPreviewLink("url-original", data["url-original"]);
     setPreviewLink("url-vx", data["url-vx"]);
