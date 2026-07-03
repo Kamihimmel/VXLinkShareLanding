@@ -242,6 +242,7 @@ nav a:hover { color: var(--text-main); text-shadow: 0 0 18px rgba(56, 189, 248, 
 .webapp-icon { background: linear-gradient(135deg, var(--accent), var(--violet)); font-size: 0.72rem; }
 .android-icon { background: linear-gradient(135deg, #3ddc84, #0f9f6e); }
 .ios-icon { background: linear-gradient(135deg, #f8fafc, #94a3b8); color: #0f172a; font-size: 0.64rem; letter-spacing: -0.08em; }
+.github-icon { background: linear-gradient(135deg, #24292f, #0f172a); border: 1px solid rgba(255,255,255,.16); font-size: 0.66rem; }
 .btn-text { display: flex; flex-direction: column; min-width: 0; }
 .btn-text small { font-size: 0.72rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 2px; }
 .btn-text span { font-size: 0.95rem; font-weight: 700; }

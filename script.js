@@ -20,6 +20,8 @@ const i18nData = {
         "btn-edge": "Microsoft Edge Add-ons",
         "btn-android": "Android",
         "btn-ios": "iOS",
+        "btn-github": "GitHub Project",
+        "store-github-small": "Open source",
         "preview-original": "Original Link:",
         "preview-arrow": "⬇️ Strips trackers & rewrites host",
         "preview-vx": "Cleaned VX Link:",
@@ -75,6 +77,8 @@ const i18nData = {
         "btn-edge": "Microsoft Edge 加载项",
         "btn-android": "安卓版",
         "btn-ios": "iOS 版",
+        "btn-github": "GitHub 项目",
+        "store-github-small": "开源项目",
         "preview-original": "原始链接:",
         "preview-arrow": "⬇️ 自动净化参数并重写域名",
         "preview-vx": "VX 净化链接:",
@@ -130,6 +134,8 @@ const i18nData = {
         "btn-edge": "Microsoft Edge 附加元件",
         "btn-android": "Android 版",
         "btn-ios": "iOS 版",
+        "btn-github": "GitHub 專案",
+        "store-github-small": "開源專案",
         "preview-original": "原始連結:",
         "preview-arrow": "⬇️ 移除追蹤並改寫網域",
         "preview-vx": "VX 淨化連結:",
@@ -185,6 +191,8 @@ const i18nData = {
         "btn-edge": "Microsoft Edge Add-ons",
         "btn-android": "Android",
         "btn-ios": "iOS",
+        "btn-github": "Proyecto en GitHub",
+        "store-github-small": "Código abierto",
         "preview-original": "Enlace original:",
         "preview-arrow": "⬇️ Elimina rastreadores y reescribe el dominio",
         "preview-vx": "Enlace VX limpio:",
@@ -240,6 +248,8 @@ const i18nData = {
         "btn-edge": "Microsoft Edge Add-ons",
         "btn-android": "Android",
         "btn-ios": "iOS",
+        "btn-github": "مشروع GitHub",
+        "store-github-small": "مفتوح المصدر",
         "preview-original": "الرابط الأصلي:",
         "preview-arrow": "⬇️ إزالة التتبع وإعادة كتابة النطاق",
         "preview-vx": "رابط VX المنظف:",
@@ -295,6 +305,8 @@ const i18nData = {
         "btn-edge": "Microsoft Edge Add-ons",
         "btn-android": "Android",
         "btn-ios": "iOS",
+        "btn-github": "Projeto no GitHub",
+        "store-github-small": "Código aberto",
         "preview-original": "Link original:",
         "preview-arrow": "⬇️ Remove rastreadores e reescreve o domínio",
         "preview-vx": "Link VX limpo:",
@@ -350,6 +362,8 @@ const i18nData = {
         "btn-edge": "Microsoft Edge Add-ons",
         "btn-android": "Android",
         "btn-ios": "iOS",
+        "btn-github": "Projet GitHub",
+        "store-github-small": "Open source",
         "preview-original": "Lien original :",
         "preview-arrow": "⬇️ Supprime le suivi et réécrit le domaine",
         "preview-vx": "Lien VX nettoyé :",
@@ -405,6 +419,8 @@ const i18nData = {
         "btn-edge": "Microsoft Edge Add-ons",
         "btn-android": "Android 版",
         "btn-ios": "iOS 版",
+        "btn-github": "GitHub プロジェクト",
+        "store-github-small": "オープンソース",
         "preview-original": "元のリンク:",
         "preview-arrow": "⬇️ 追跡を削除しホストを書き換え",
         "preview-vx": "クリーンな VX リンク:",
@@ -492,7 +508,7 @@ function applyTranslations() {
         if (data[key]) el.textContent = data[key];
     });
 
-    ["btn-chrome", "btn-firefox", "btn-edge", "btn-safari", "btn-webapp", "btn-android", "btn-ios", "back-home", "p-title", "p-h1", "p-h2", "p-d2", "p-h3", "p-d3", "p-l1", "p-l2", "p-l3", "p-h4", "p-d4"].forEach(id => setText(id, data[id]));
+    ["btn-chrome", "btn-firefox", "btn-edge", "btn-safari", "btn-webapp", "btn-android", "btn-ios", "btn-github", "back-home", "p-title", "p-h1", "p-h2", "p-d2", "p-h3", "p-d3", "p-l1", "p-l2", "p-l3", "p-h4", "p-d4"].forEach(id => setText(id, data[id]));
     ["p-intro", "p-d1"].forEach(id => setHtml(id, data[id]));
     setPreviewLink("url-original", data["url-original"]);
     setPreviewLink("url-vx", data["url-vx"]);
