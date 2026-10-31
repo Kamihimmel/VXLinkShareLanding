@@ -48,25 +48,26 @@
 
     <main class="container">
         <div class="policy-content">
-            <h1 id="p-title">隐私政策</h1>
-            <p id="p-intro">VX Link Helper 扩展程序在开发设计上将用户的“绝对隐私”放在首位。本政策阐明了本扩展不涉及任何用户数据的处理逻辑：</p>
+            <h1 id="p-title" data-i18n="p-title">VX Link 隐私政策</h1>
+            <p id="p-intro" data-i18n="p-intro">本政策适用于 VX Link Helper 浏览器扩展和 VX Link 移动应用。</p>
 
-            <h2 id="p-h1">1. 零数据收集</h2>
-            <p id="p-d1">我们<b>不会收集、存储、上传、传输或销售</b>您的任何个人信息、浏览历史或剪贴板内容。扩展程序没有后台统计、没有行为分析脚本，更没有设立任何远程服务器。</p>
+            <h2 id="p-h1" data-i18n="p-h1">1. 零数据收集</h2>
+            <p id="p-d1" data-i18n="p-d1">这两款产品均不会向我们或我们的服务器收集或传输个人数据、网址、剪贴板内容、浏览历史、分析数据、遥测数据、广告数据或跟踪数据。</p>
 
-            <h2 id="p-h2">2. 本地化运行架构</h2>
-            <p id="p-d2">所有的链接参数剥离和重写操作（如过滤 bilibili 追踪代码、重定向 Reddit 链接）全部由您本地设备的浏览器底层沙盒隔离执行，数据完全属于您自己。</p>
+            <h2 id="p-h2" data-i18n="p-h2">2. 设备端处理</h2>
+            <p id="p-d2" data-i18n="p-d2">链接转换完全在您的设备上完成，不会为进行转换而将网址发送给我们。</p>
 
-            <h2 id="p-h3">3. 权限合规说明</h2>
-            <p id="p-d3">本扩展申请的专用权限仅为实现对应原生功能，绝无滥用：</p>
-            <ul>
-                <li id="p-l1">contextMenus: 用于在右键菜单中生成“复制 VX 链接”选项。</li>
-                <li id="p-l2">clipboardWrite: 用于将清洗干净的链接回写至系统剪贴板。</li>
-                <li id="p-l3">特定主站域名匹配: 用于在被支持的网站上安全注入对应的物理复制按钮。</li>
-            </ul>
+            <h2 id="p-h3" data-i18n="p-h3">3. 剪贴板访问</h2>
+            <p id="p-d3" data-i18n="p-d3">移动应用仅在前台的用户操作流程中读取剪贴板；快速模式为可选功能。</p>
 
-            <h2 id="p-h4">4. 商店统计说明</h2>
-            <p id="p-d4">Chrome Web Store、Firefox Add-ons、Edge Add-ons 或 Safari 等分发平台可能向开发者提供聚合安装量、版本、地区或活跃设备统计。这些统计来自商店平台本身；VX Link Helper 扩展不会主动上传您的链接、剪贴板内容或浏览行为。</p>
+            <h2 id="p-h4" data-i18n="p-h4">4. 本地历史记录与 App Group</h2>
+            <p id="p-d4" data-i18n="p-d4">移动应用可在设备上保存可关闭、可清除的转换历史；iOS App Group 仅用于应用与扩展之间的本地数据交换。</p>
+
+            <h2 id="p-h5" data-i18n="p-h5">5. 权限与外部操作</h2>
+            <p id="p-d5" data-i18n="p-d5">浏览器权限仅用于链接转换。主动打开或分享网址时，网址可能交给受其自身隐私政策约束的外部应用或服务。</p>
+
+            <h2 id="p-h6" data-i18n="p-h6">6. 商店统计信息</h2>
+            <p id="p-d6" data-i18n="p-d6">Apple、Google 和浏览器扩展商店可能依据其各自政策提供汇总统计。</p>
         </div>
     </main>
 
@@ -77,10 +78,11 @@
                 <span aria-hidden="true"> · </span>
                 <a href="privacy.html" data-i18n="footer-privacy">隐私政策</a>
             </p>
-            <p class="footer-note" data-i18n="footer-text">VX Link Helper 承诺完全开源、本地运行且无任何潜在数据追踪。</p>
+            <p class="footer-note" data-i18n="privacy-footer-text">VX Link 在本地处理链接，不添加分析或跟踪功能。</p>
         </div>
     </footer>
 
+    <script src="privacy.js"></script>
     <script src="script.js"></script>
 </body>
 </html>

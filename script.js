@@ -530,7 +530,9 @@ function setPreviewLink(id, value) {
 }
 
 function applyTranslations() {
-    const data = i18nData[currentLang] || i18nData.en;
+    const baseData = i18nData[currentLang] || i18nData.en;
+    const pageData = window.pageI18n?.[currentLang] || {};
+    const data = { ...baseData, ...pageData };
     const config = languageConfig[currentLang] || languageConfig.en;
     document.documentElement.lang = config.htmlLang;
     document.documentElement.dir = config.dir;

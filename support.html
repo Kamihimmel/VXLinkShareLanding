@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Support and contact information for VX Link.">
+    <title>Support - VX Link</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" type="image/png" href="icon128.png">
+    <style>
+        .support-content { background-color: var(--card-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 40px; margin: 40px auto; max-width: 800px; }
+        .support-content h1 { margin-bottom: 20px; font-size: 2.3rem; }
+        .support-content h2 { color: var(--accent); margin-top: 30px; margin-bottom: 15px; font-size: 1.4rem; }
+        .support-content h3 { margin-top: 22px; margin-bottom: 8px; }
+        .support-content p { margin-bottom: 15px; color: var(--text-muted); }
+        .support-content .discord-button { display: inline-flex; margin-top: 8px; }
+    </style>
+</head>
+<body>
+    <div class="background-tech" aria-hidden="true"><span></span><span></span><span></span></div>
+    <header>
+        <div class="container nav-container">
+            <div class="logo">
+                <a href="index.html" style="display: flex; align-items: center; gap: 12px; text-decoration: none; color: inherit;">
+                    <img src="icon128.png" alt="VX Link Helper Logo" class="logo-img">
+                    <span>VX Link</span>
+                </a>
+            </div>
+            <nav>
+                <a href="index.html" id="back-home">Back to Home</a>
+                <label class="lang-control" for="lang-select">
+                    <span data-i18n="language-label">Language</span>
+                    <select id="lang-select" class="lang-select" aria-label="Language">
+                        <option value="en">English</option>
+                        <option value="zh">简体中文</option>
+                        <option value="zh-TW">繁體中文</option>
+                        <option value="es">Español</option>
+                        <option value="ar">العربية</option>
+                        <option value="pt">Português</option>
+                        <option value="fr">Français</option>
+                        <option value="ja">日本語</option>
+                    </select>
+                </label>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="support-content">
+            <h1 data-i18n="support-title">VX Link Support</h1>
+            <p data-i18n="support-intro">Get help with VX Link on iOS, Android, the web, or supported browsers.</p>
+
+            <h2 data-i18n="support-contact-title">Contact Support</h2>
+            <p data-i18n="support-contact-text">Join our Discord community to report a problem, ask a question, or follow release updates.</p>
+            <a href="https://discord.gg/m9Hw3ErqYU" target="_blank" rel="noopener" class="discord-button" aria-label="Join Discord">
+                <img src="assets/store-icons/Discord-Logo-White.svg" alt="" aria-hidden="true">
+                <span data-i18n="discord-button">Join Discord</span>
+            </a>
+
+            <h2 data-i18n="support-faq-title">Quick Help</h2>
+            <h3 data-i18n="support-faq1-q">Does VX Link upload my links?</h3>
+            <p data-i18n="support-faq1-a">No. Link conversion runs on your device.</p>
+            <h3 data-i18n="support-faq2-q">Why does iOS ask about pasting?</h3>
+            <p data-i18n="support-faq2-a">iOS may show a system prompt when an app reads the clipboard.</p>
+            <h3 data-i18n="support-faq3-q">How do I clear local history?</h3>
+            <p data-i18n="support-faq3-a">Open History in the app and choose Clear.</p>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p class="footer-meta">
+                <a href="privacy.html" data-i18n="footer-privacy">Privacy Policy</a>
+            </p>
+            <p class="footer-note" data-i18n="support-footer">Support is provided through the VX Link community.</p>
+        </div>
+    </footer>
+
+    <script src="support.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
