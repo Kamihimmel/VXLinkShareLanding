@@ -281,11 +281,13 @@ code { font-family: 'JetBrains Mono', monospace; background-color: rgba(0, 0, 0,
 
 .platforms { padding: 72px 0; border-top: 1px solid var(--border-color); }
 .table-wrapper { overflow-x: auto; border-radius: 18px; }
-table { width: 100%; border-collapse: collapse; background: var(--card-bg); overflow: hidden; border: 1px solid var(--border-color); }
+table { width: 100%; min-width: 920px; border-collapse: collapse; background: var(--card-bg); overflow: hidden; border: 1px solid var(--border-color); }
 th, td { padding: 18px 24px; text-align: left; border-bottom: 1px solid var(--border-color); font-size: 0.95rem; }
 th { background-color: rgba(17, 24, 39, 0.76); font-weight: 700; color: var(--text-main); }
 tr:last-child td { border-bottom: 0; }
 .highlight code { color: var(--accent); font-weight: 700; }
+.scope-badge { display: inline-flex; padding: 6px 10px; border: 1px solid rgba(56, 189, 248, .28); border-radius: 999px; color: #bae6fd; background: rgba(14, 116, 144, .12); white-space: nowrap; font-size: .8rem; font-weight: 600; }
+.scope-badge.mobile-only { border-color: rgba(168, 85, 247, .34); color: #e9d5ff; background: rgba(126, 34, 206, .14); }
 
 .discord-join {
     padding: 72px 0;
