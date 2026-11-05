@@ -20,6 +20,23 @@
     "expected": "https://instagramx.com/p/DdOFW0kiSgZ"
   },
   {
+    "name": "Instagram reel removes xtok promotion tracking",
+    "input": "https://www.instagram.com/reel/DeHseCkJtgV/?xtok=enFoZzdoaDdoZDB6",
+    "expected": "https://instagramx.com/reel/DeHseCkJtgV"
+  },
+  {
+    "name": "Instagram xtok share text preserves caption",
+    "input": "Watch this https://www.instagram.com/reel/DeHseCkJtgV/?xtok=enFoZzdoaDdoZDB6",
+    "expected": "Watch this https://instagramx.com/reel/DeHseCkJtgV"
+  },
+  {
+    "name": "Converted Instagram xtok share text preserves caption",
+    "input": "Watch this https://instagramx.com/reel/DeHseCkJtgV/?xtok=enFoZzdoaDdoZDB6",
+    "expected": "Watch this https://instagramx.com/reel/DeHseCkJtgV",
+    "expectedSiteKey": "instagram",
+    "expectedChanged": true
+  },
+  {
     "name": "YouTube short link removes si tracking",
     "input": "https://youtu.be/eYBEJBfq_Zs?si=wATkPilRjo7NI4lq",
     "expected": "https://youtu.be/eYBEJBfq_Zs"
@@ -42,9 +59,16 @@
     "expectedChanged": false
   },
   {
-    "name": "Already converted Instagram link is unchanged",
-    "input": "https://instagramx.com/reel/DfBVPyxTfbY/?igsh=keep",
-    "expected": "https://instagramx.com/reel/DfBVPyxTfbY/?igsh=keep",
+    "name": "Already converted Instagram link removes known tracking",
+    "input": "https://instagramx.com/reel/DeHseCkJtgV/?xtok=enFoZzdoaDdoZDB6",
+    "expected": "https://instagramx.com/reel/DeHseCkJtgV",
+    "expectedSiteKey": "instagram",
+    "expectedChanged": true
+  },
+  {
+    "name": "Clean converted Instagram link remains unchanged",
+    "input": "https://instagramx.com/reel/DeHseCkJtgV",
+    "expected": "https://instagramx.com/reel/DeHseCkJtgV",
     "expectedSiteKey": "instagram",
     "expectedChanged": false
   },
