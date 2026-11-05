@@ -1,0 +1,58 @@
+[
+  {
+    "name": "Facebook converts to facebed and removes tracking",
+    "input": "https://www.facebook.com/share/p/1LauEmKPkU/?mibextid=wwXIfr&utm_source=share",
+    "expected": "https://facebed.com/share/p/1LauEmKPkU"
+  },
+  {
+    "name": "Facebook share text preserves caption",
+    "input": "Look https://m.facebook.com/share/p/1LauEmKPkU/?mibextid=wwXIfr",
+    "expected": "Look https://facebed.com/share/p/1LauEmKPkU"
+  },
+  {
+    "name": "Instagram reel converts to instagramx and removes tracking",
+    "input": "https://www.instagram.com/reel/DfBVPyxTfbY/?cplk=MTVpaXpiNjZteWYzZA==&igsh=abc",
+    "expected": "https://instagramx.com/reel/DfBVPyxTfbY"
+  },
+  {
+    "name": "Instagram post removes stkn tracking",
+    "input": "https://www.instagram.com/p/DdOFW0kiSgZ/?stkn=MWRyYzEzMWhsMGZ5ZQ==",
+    "expected": "https://instagramx.com/p/DdOFW0kiSgZ"
+  },
+  {
+    "name": "YouTube short link removes si tracking",
+    "input": "https://youtu.be/eYBEJBfq_Zs?si=wATkPilRjo7NI4lq",
+    "expected": "https://youtu.be/eYBEJBfq_Zs"
+  },
+  {
+    "name": "YouTube Shorts removes share tracking",
+    "input": "https://youtube.com/shorts/T6r_9TPXxu4?si=_33kyWm2vYpjs5CJ&feature=share",
+    "expected": "https://youtube.com/shorts/T6r_9TPXxu4"
+  },
+  {
+    "name": "YouTube watch keeps playback and playlist parameters",
+    "input": "https://www.youtube.com/watch?v=abc123&si=track&feature=shared&t=42s&list=PL123",
+    "expected": "https://www.youtube.com/watch?v=abc123&t=42s&list=PL123"
+  },
+  {
+    "name": "Already converted Facebook link is unchanged",
+    "input": "https://facebed.com/share/p/1LauEmKPkU/?mibextid=keep",
+    "expected": "https://facebed.com/share/p/1LauEmKPkU/?mibextid=keep",
+    "expectedSiteKey": "facebook",
+    "expectedChanged": false
+  },
+  {
+    "name": "Already converted Instagram link is unchanged",
+    "input": "https://instagramx.com/reel/DfBVPyxTfbY/?igsh=keep",
+    "expected": "https://instagramx.com/reel/DfBVPyxTfbY/?igsh=keep",
+    "expectedSiteKey": "instagram",
+    "expectedChanged": false
+  },
+  {
+    "name": "Clean YouTube link is detected without changes",
+    "input": "https://youtu.be/eYBEJBfq_Zs",
+    "expected": "https://youtu.be/eYBEJBfq_Zs",
+    "expectedSiteKey": "youtube",
+    "expectedChanged": false
+  }
+]
