@@ -25,6 +25,11 @@
     "expected": "https://instagramx.com/reel/DeHseCkJtgV"
   },
   {
+    "name": "Instagram source removes entire unknown query and keeps fragment",
+    "input": "https://www.instagram.com/p/DfRYg5gHd0c/?vrfl=NTc4MTIwNjQ2YQ%3D%3D&future_key=1#media",
+    "expected": "https://instagramx.com/p/DfRYg5gHd0c/#media"
+  },
+  {
     "name": "Instagram xtok share text preserves caption",
     "input": "Watch this https://www.instagram.com/reel/DeHseCkJtgV/?xtok=enFoZzdoaDdoZDB6",
     "expected": "Watch this https://instagramx.com/reel/DeHseCkJtgV"
@@ -59,9 +64,16 @@
     "expectedChanged": false
   },
   {
-    "name": "Already converted Instagram link removes known tracking",
+    "name": "Already converted Instagram link removes query parameters",
     "input": "https://instagramx.com/reel/DeHseCkJtgV/?xtok=enFoZzdoaDdoZDB6",
     "expected": "https://instagramx.com/reel/DeHseCkJtgV",
+    "expectedSiteKey": "instagram",
+    "expectedChanged": true
+  },
+  {
+    "name": "Converted Instagram removes entire unknown query and keeps fragment",
+    "input": "https://instagramx.com/p/DfRYg5gHd0c/?vrfl=NTc4MTIwNjQ2YQ%3D%3D&future_key=1#media",
+    "expected": "https://instagramx.com/p/DfRYg5gHd0c/#media",
     "expectedSiteKey": "instagram",
     "expectedChanged": true
   },

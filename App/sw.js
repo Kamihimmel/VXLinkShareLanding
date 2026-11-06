@@ -1,7 +1,7 @@
-const CACHE = "vx-link-helper-app-v12-20261105-instagram-xtok";
+const CACHE = "vx-link-helper-app-v13-20261106-instagram-query";
 const ASSETS = [
-  "./", "./index.html", "./styles.css?v=20261105-instagram-xtok", "./app.js?v=20261105-instagram-xtok", "./manifest.webmanifest?v=20261105-instagram-xtok",
-  "./icons/icon-192.png?v=20261105-instagram-xtok", "./icons/icon-512.png", "./icons/maskable-192.png", "./icons/maskable-512.png", "../icon128.png"
+  "./", "./index.html", "./styles.css?v=20261106-instagram-query", "./app.js?v=20261106-instagram-query", "./manifest.webmanifest?v=20261106-instagram-query",
+  "./icons/icon-192.png?v=20261106-instagram-query", "./icons/icon-512.png", "./icons/maskable-192.png", "./icons/maskable-512.png", "../icon128.png"
 ];
 self.addEventListener("install", (event) => {
   event.waitUntil(caches.open(CACHE).then((cache) => cache.addAll(ASSETS)).then(() => self.skipWaiting()));
